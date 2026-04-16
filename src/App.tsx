@@ -12,7 +12,9 @@ import {
   X,
   AlertCircle,
   Instagram,
-  Linkedin
+  Linkedin,
+  MapPin,
+  Play
 } from "lucide-react";
 import { useState, useMemo, ChangeEvent, FormEvent } from "react";
 
@@ -243,6 +245,109 @@ export default function App() {
           </div>
         </section>
 
+        {/* Institucional / About Section */}
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Excelência Industrial</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 leading-tight">
+                Qualidade excepcional e inovação constante.
+              </h2>
+              <div className="space-y-6 text-on-surface-variant font-light leading-relaxed text-base md:text-lg">
+                <p>
+                  A INACOM é uma fábrica de abrasivos focada em produtos para brunimento. Reconhecida pela qualidade excepcional de seus itens e pela constante inovação, a empresa se destaca no mercado industrial.
+                </p>
+                <p>
+                  Com anos de experiência e um compromisso sólido com a excelência, a INACOM oferece abrasivos de alto desempenho desenhados para os desafios mais rigorosos da usinagem moderna.
+                </p>
+              </div>
+            </motion.div>
+            <div className="relative aspect-square lg:aspect-video ghost-border overflow-hidden">
+               <img 
+                src="https://picsum.photos/seed/precision/1200/800" 
+                alt="INACOM Industrial Facility" 
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                referrerPolicy="no-referrer"
+               />
+               <div className="absolute bottom-0 left-0 bg-primary text-white p-6 md:p-10 max-w-xs">
+                 <p className="text-xs font-black uppercase tracking-widest leading-relaxed">
+                   "A qualidade de nossos abrasivos falam por si só."
+                 </p>
+               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Materials & Advantages Section */}
+        <section className="bg-surface py-20 md:py-32 px-4 sm:px-6 md:px-12 border-y border-outline-variant/10">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="mb-20 md:mb-32">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Engenharia de Materiais</span>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase text-monolith leading-tight mb-12">
+                Quais materiais usamos?
+              </h2>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { name: "Microcristal", code: "MC-X1", desc: "Alta durabilidade e acabamento ultrafino." },
+                  { name: "Carboneto de Silício Verde", code: "CS-G8", desc: "Ideal para materiais não-ferrosos e metal duro." },
+                  { name: "Óxido de Alumínio", code: "AL-O2", desc: "Especialmente eficiente em aços de alta liga." },
+                  { name: "Carboneto de Silício Preto", code: "CS-B4", desc: "Máxima agressividade para desbastes pesados." }
+                ].map((item, i) => (
+                  <div key={i} className="bg-white p-8 border border-outline-variant/20 hover:border-primary transition-colors group relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-2 opacity-5">
+                      <Cpu size={64} />
+                    </div>
+                    <span className="font-mono text-[9px] text-primary mb-4 block tracking-widest">{item.code}</span>
+                    <h4 className="font-black uppercase text-sm mb-3 tracking-tight group-hover:text-primary transition-colors">{item.name}</h4>
+                    <p className="text-[11px] text-on-surface-variant font-light leading-relaxed">
+                      {item.desc}
+                    </p>
+                    <div className="mt-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="h-px w-4 bg-primary"></div>
+                      <span className="text-[8px] font-bold uppercase tracking-widest text-primary">Especificação Técnica</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-32">
+              <div>
+                <h3 className="text-2xl font-black uppercase mb-8 flex items-center gap-4">
+                  <span className="h-0.5 w-12 bg-primary"></span>
+                  Vantagens Competitivas
+                </h3>
+                <div className="space-y-8">
+                  <p className="text-on-surface-variant font-light leading-relaxed italic border-l-2 border-outline-variant/30 pl-8">
+                    "Nossas pedras abrasivas oferecem o melhor custo/benefício do mercado, garantindo repetitividade constante em velocidade padronizada."
+                  </p>
+                  <p className="text-on-surface-variant font-light leading-relaxed">
+                    Com precisão excepcional, nossas pedras realizam ranhuras na parede da peça sem falhas, eliminando os riscos de sobrecargas na máquina. Além disso, proporcionam maior concentricidade no movimento realizado.
+                  </p>
+                  <p className="text-on-surface-variant font-light leading-relaxed font-bold">
+                    Resultando em operações precisas tanto na geometria da peça quanto no diâmetro do furo. Conte conosco para obter resultados de alta qualidade e eficiência em seus processos de brunimento.
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="aspect-square bg-surface-container-low p-8 flex flex-col justify-end ghost-border group">
+                  <div className="text-4xl font-black text-primary/20 group-hover:text-primary transition-colors mb-4">01</div>
+                  <p className="text-[10px] font-black uppercase tracking-widest">Repetitividade Constante</p>
+                </div>
+                <div className="aspect-square bg-white p-8 flex flex-col justify-end ghost-border group mt-8">
+                  <div className="text-4xl font-black text-primary/20 group-hover:text-primary transition-colors mb-4">02</div>
+                  <p className="text-[10px] font-black uppercase tracking-widest">Precisão Geométrica</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Homologation Protocol Section */}
         <section className="bg-surface-container-high py-20 md:py-32 px-4 sm:px-6 md:px-12 overflow-hidden" id="protocolo">
           <div className="max-w-[1440px] mx-auto">
@@ -255,14 +360,14 @@ export default function App() {
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Protocolo Operacional</span>
               <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase text-monolith leading-tight md:leading-none">
                 Homologue sem Risco.<br />
-                <span className="text-transparent border-text font-outline-2 stroke-primary" style={{ WebkitTextStroke: '1px black' }}>Nosso processo em 3 passos.</span>
+                <span className="text-primary">Nosso processo em 3 passos.</span>
               </h2>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 lg:gap-20">
               {/* Step 1 */}
               <div className="relative">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-white leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0 opacity-100">01</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline-variant/30 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">01</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -275,7 +380,7 @@ export default function App() {
               </div>
               {/* Step 2 */}
               <div className="relative">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-white leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0 opacity-100">02</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline-variant/30 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">02</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -288,7 +393,7 @@ export default function App() {
               </div>
               {/* Step 3 */}
               <div className="relative md:col-span-2 lg:col-span-1">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-white leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0 opacity-100">03</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline-variant/30 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">03</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -303,13 +408,45 @@ export default function App() {
           </div>
         </section>
 
+        {/* Video Presentation Section */}
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12 md:mb-16"
+            >
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-4">Apresentação Técnica</h2>
+              <div className="h-1 w-24 bg-primary mx-auto"></div>
+            </motion.div>
+            
+            <div className="relative w-full max-w-5xl mx-auto aspect-video ghost-border overflow-hidden bg-surface-container">
+              <iframe 
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/uESr_l5TUfg" 
+                title="Apresentação INACOM" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowFullScreen
+              ></iframe>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <p className="text-on-surface-variant font-light italic text-sm sm:text-base">
+                Conheça nossa linha completa de produtos e soluções para brunimento industrial.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Form Section */}
         <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
           <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 md:mb-12">Raio-X de Processo</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 md:mb-12">Solicite orçamento personalizado para seu projeto.</h2>
               <p className="text-on-surface-variant mb-8 md:mb-12 text-base sm:text-lg font-light leading-relaxed">
-                Inicie o protocolo de homologação preenchendo os dados técnicos do seu desafio atual. Nossa equipe de engenharia de aplicação analisará os dados em até 24h.
+                Nosso compromisso é com você, atendimento 100% personalizado para garantir a solução exata para sua linha de produção industrial.
               </p>
               <div className="space-y-4 md:space-y-6">
                 <div className="flex items-center gap-4 sm:gap-6 py-4 sm:py-6 border-b border-outline-variant/20">
@@ -456,7 +593,7 @@ export default function App() {
                     type="submit"
                     className="w-full btn-machined text-white py-5 sm:py-6 font-bold uppercase tracking-[0.2em] mt-4 md:mt-8 group flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Enviar para Diagnóstico
+                    Solicitar orçamento
                     <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
                   </button>
                 </form>
@@ -483,9 +620,9 @@ export default function App() {
               Performance em Corte Industrial. Especialistas em brunimento e abrasivos de alta precisão com tecnologia alemã aplicada ao mercado brasileiro.
             </p>
             <div className="flex flex-col gap-4 text-[10px] sm:text-xs tracking-widest uppercase">
-              <span className="flex items-center gap-3"><Phone size={14} className="text-outline-variant" /> +55 (19) 3000-0000</span>
+              <span className="flex items-center gap-3"><Phone size={14} className="text-outline-variant" /> +55 (19) 3935 4487</span>
               <span className="flex items-center gap-3"><Mail size={14} className="text-outline-variant" /> tech@inacom.com.br</span>
-              <span className="flex items-center gap-3"><Building2 size={14} className="text-outline-variant" /> vendas@inacom.com.br</span>
+              <span className="flex items-center gap-3"><MapPin size={14} className="text-outline-variant" /> R. Pérola, 783 - Indaiatuba, SP</span>
             </div>
           </div>
           
@@ -501,7 +638,11 @@ export default function App() {
             <div className="flex flex-col gap-4 sm:gap-6">
               <h5 className="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-4">Empresa</h5>
               <div className="flex flex-col gap-4 text-[10px] text-outline-variant uppercase tracking-widest">
-                <a className="hover:text-white transition-colors" href="#">Indaiatuba - SP</a>
+                <div className="flex flex-col gap-1">
+                  <span className="text-white/40">Localização</span>
+                  <span className="normal-case font-light">R. Pérola, 783 - Recreio Campestre Jóia</span>
+                  <span className="normal-case font-light">Indaiatuba - SP, 13347-150</span>
+                </div>
                 <a className="hover:text-white transition-colors" href="#">Support</a>
                 <a className="hover:text-white transition-colors" href="#">Protocolos</a>
               </div>
