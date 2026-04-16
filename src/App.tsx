@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   ChevronRight, 
   CheckCircle2, 
@@ -9,35 +9,148 @@ import {
   Mail, 
   Building2,
   Menu,
-  X
+  X,
+  AlertCircle,
+  Instagram,
+  Linkedin
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo, ChangeEvent, FormEvent } from "react";
+
+interface FormData {
+  nome: string;
+  empresa: string;
+  whatsapp: string;
+  email: string;
+  material: string;
+  marcaMaquina: string;
+  rugosidade: string;
+  desafio: string;
+}
+
+interface FormErrors {
+  [key: string]: string | undefined;
+}
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    nome: "",
+    empresa: "",
+    whatsapp: "",
+    email: "",
+    material: "Ferro Fundido",
+    marcaMaquina: "",
+    rugosidade: "",
+    desafio: "Reduzir custo por peça",
+  });
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const validate = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case "nome":
+        if (!value.trim()) return "Nome é obrigatório";
+        if (value.trim().length < 3) return "Nome muito curto";
+        return undefined;
+      case "empresa":
+        if (!value.trim()) return "Empresa é obrigatória";
+        return undefined;
+      case "whatsapp":
+        if (!value.trim()) return "WhatsApp é obrigatório";
+        if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value)) return "Formato inválido: (00) 00000-0000";
+        return undefined;
+      case "email":
+        if (!value.trim()) return "E-mail é obrigatório";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "E-mail inválido";
+        return undefined;
+      case "marcaMaquina":
+        if (!value.trim()) return "Marca da máquina é obrigatória";
+        return undefined;
+      case "rugosidade":
+        if (!value.trim()) return "Especificação de rugosidade é obrigatória";
+        return undefined;
+      default:
+        return undefined;
+    }
+  };
+
+  const errors = useMemo(() => {
+    const newErrors: FormErrors = {};
+    Object.keys(formData).forEach((key) => {
+      const error = validate(key, formData[key as keyof FormData]);
+      if (error) newErrors[key] = error;
+    });
+    return newErrors;
+  }, [formData]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBlur = (name: string) => {
+    setTouched((prev) => ({ ...prev, [name]: true }));
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const allTouched = Object.keys(formData).reduce((acc, key) => ({ ...acc, [key]: true }), {});
+    setTouched(allTouched);
+
+    if (Object.keys(errors).length === 0) {
+      setIsSubmitted(true);
+      // Logic for sending data would go here
+      setTimeout(() => setIsSubmitted(false), 5000);
+    }
+  };
+
+  const renderError = (name: string) => {
+    if (touched[name] && errors[name]) {
+      return (
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 text-error text-[10px] font-bold uppercase tracking-widest mt-2"
+        >
+          <AlertCircle size={12} />
+          {errors[name]}
+        </motion.div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="min-h-screen selection:bg-primary selection:text-white">
       {/* Header Section */}
       <header className="bg-background/80 backdrop-blur-md sticky top-0 z-50 border-b border-outline-variant/10">
-        <nav className="flex justify-between items-center w-full px-6 md:px-12 py-5 max-w-[1440px] mx-auto">
-          <div className="text-2xl font-black tracking-tighter text-primary">
-            INACOM
-          </div>
+        <nav className="flex justify-between items-center w-full px-4 md:px-12 py-4 md:py-5 max-w-[1440px] mx-auto">
+          <a href="#inicio" className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <img 
+              src="https://i.ibb.co/s9z8M4jb/Chat-GPT-Image-16-de-abr-de-2026-16-23-25.png" 
+              alt="INACOM Industrial Precision" 
+              className="h-7 sm:h-8 md:h-10 w-auto object-contain"
+              referrerPolicy="no-referrer"
+            />
+            <span className="text-xl sm:text-2xl font-black tracking-tighter text-primary">
+              INACOM
+            </span>
+          </a>
           
-          <div className="hidden md:flex items-center gap-12">
+          <div className="hidden lg:flex items-center gap-8 xl:gap-12">
             <a className="text-primary font-bold border-b-2 border-primary pb-1 transition-all" href="#inicio">Início</a>
             <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#protocolo">Protocolo de Homologação</a>
             <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#contato">Contato</a>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="hidden sm:block bg-primary text-white px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary-container transition-colors">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <button className="hidden sm:block bg-primary text-white px-4 md:px-6 py-2.5 md:py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary-container transition-colors shrink-0">
               Technical Portal
             </button>
             <button 
-              className="md:hidden p-2"
+              className="lg:hidden p-2 text-primary"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Menu"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -45,25 +158,28 @@ export default function App() {
         </nav>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="md:hidden bg-background border-b border-outline-variant/10 px-6 py-8 flex flex-col gap-6"
-          >
-            <a className="text-xl font-bold" href="#inicio" onClick={() => setIsMenuOpen(false)}>Início</a>
-            <a className="text-xl font-bold text-outline" href="#protocolo" onClick={() => setIsMenuOpen(false)}>Protocolo de Homologação</a>
-            <a className="text-xl font-bold text-outline" href="#contato" onClick={() => setIsMenuOpen(false)}>Contato</a>
-            <button className="bg-primary text-white w-full py-4 font-bold uppercase tracking-widest mt-4">
-              Technical Portal
-            </button>
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden bg-background border-b border-outline-variant/10 px-6 py-8 flex flex-col gap-6 overflow-hidden"
+            >
+              <a className="text-xl font-bold" href="#inicio" onClick={() => setIsMenuOpen(false)}>Início</a>
+              <a className="text-xl font-bold text-outline" href="#protocolo" onClick={() => setIsMenuOpen(false)}>Protocolo de Homologação</a>
+              <a className="text-xl font-bold text-outline" href="#contato" onClick={() => setIsMenuOpen(false)}>Contato</a>
+              <button className="sm:hidden bg-primary text-white w-full py-4 font-bold uppercase tracking-widest mt-4">
+                Technical Portal
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <main>
         {/* Hero Section */}
-        <section className="relative h-[80vh] md:h-[870px] w-full flex items-center overflow-hidden" id="inicio">
+        <section className="relative h-[70vh] sm:h-[80vh] md:h-[870px] w-full flex items-center overflow-hidden" id="inicio">
           <div className="absolute inset-0 z-0">
             <img 
               alt="Industrial Precision Machine" 
@@ -71,7 +187,7 @@ export default function App() {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuABt0P2haWD3372L9QIejYj2V0KJm6vzTyU8a6kKHCX7SkuWyb1lnMrLkJH_lvOF9IQmkZV1S7ytUyvItS-bcqCI1Nmi0O57vsniWv0A0XBMCReMP4AMMoaGrVY96LNY2P4l1w48iqmlFxJJJPJHvXe_jaKZrA4kAv8t_J2t_sPewdJsL8400oQfGtAa-gcSUrWrf64ibgXGAwAtS8AdZSduyuW2TKzRURz7Fuc14PZyvCFtbGe3JkiwYNr3u_sGLMtVYGjGgcNq4hh"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent"></div>
           </div>
           <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-16 w-full">
             <motion.div 
@@ -80,13 +196,13 @@ export default function App() {
               transition={{ duration: 0.8 }}
               className="max-w-3xl"
             >
-              <h1 className="text-white text-4xl md:text-7xl font-black leading-[0.9] text-monolith mb-8 uppercase">
+              <h1 className="text-white text-3xl sm:text-5xl md:text-7xl font-black leading-[1] md:leading-[0.9] text-monolith mb-6 md:mb-8 uppercase">
                 Domínio Absoluto em Brunimento Industrial
               </h1>
-              <p className="text-on-primary text-base md:text-xl font-light mb-12 max-w-xl border-l-2 border-primary-fixed-dim pl-8 leading-relaxed">
+              <p className="text-on-primary text-sm sm:text-base md:text-xl font-light mb-8 md:mb-12 max-w-xl border-l-2 border-primary-fixed-dim pl-6 md:pl-8 leading-relaxed">
                 Ferramentas abrasivas de alta precisão desenhadas para estabilidade de processo, alcance exato de rugosidade e redução de custo por peça.
               </p>
-              <button className="btn-machined text-white px-12 py-6 text-xs font-bold uppercase tracking-[0.2em] inline-flex items-center gap-4 group">
+              <button className="btn-machined text-white px-8 md:px-12 py-4 md:py-6 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] inline-flex items-center gap-4 group">
                 Solicitar Kit Try-Out
                 <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </button>
@@ -95,31 +211,31 @@ export default function App() {
         </section>
 
         {/* Authority Section */}
-        <section className="bg-surface py-24 px-6 md:px-12">
-          <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-outline-variant/15">
-            <div className="p-12 border-b md:border-b-0 md:border-r border-outline-variant/15 flex flex-col items-start bg-white group hover:bg-surface-container transition-colors duration-500">
-              <div className="p-4 bg-surface-container-low mb-8 group-hover:bg-white transition-colors">
-                <Cpu size={36} className="text-primary" />
+        <section className="bg-surface py-16 md:py-24 px-4 sm:px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-0 border-t border-outline-variant/15">
+            <div className="p-8 sm:p-12 border-b lg:border-b-0 lg:border-r border-outline-variant/15 flex flex-col items-start bg-white group hover:bg-surface-container transition-colors duration-500">
+              <div className="p-4 bg-surface-container-low mb-6 sm:mb-8 group-hover:bg-white transition-colors">
+                <Cpu size={32} sm:size={36} className="text-primary" />
               </div>
-              <h3 className="text-xl font-black uppercase tracking-tight mb-6">Precisão Extrema</h3>
+              <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight mb-4 sm:mb-6">Precisão Extrema</h3>
               <p className="text-on-surface-variant font-light leading-relaxed text-sm">
                 Abrasivos desenvolvidos para atingir o Ra e Rz exatos exigidos pelo seu desenho técnico, eliminando retrabalhos e garantindo conformidade total.
               </p>
             </div>
-            <div className="p-12 border-b md:border-b-0 md:border-r border-outline-variant/15 flex flex-col items-start bg-surface group hover:bg-surface-container-high transition-colors duration-500">
-              <div className="p-4 bg-white mb-8 group-hover:bg-surface-container-high transition-colors">
-                <Zap size={36} className="text-primary" />
+            <div className="p-8 sm:p-12 border-b lg:border-b-0 lg:border-r border-outline-variant/15 flex flex-col items-start bg-surface group hover:bg-surface-container-high transition-colors duration-500">
+              <div className="p-4 bg-white mb-6 sm:mb-8 group-hover:bg-surface-container-high transition-colors">
+                <Zap size={32} sm:size={36} className="text-primary" />
               </div>
-              <h3 className="text-xl font-black uppercase tracking-tight mb-6">Estabilidade de Processo</h3>
+              <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight mb-4 sm:mb-6">Estabilidade de Processo</h3>
               <p className="text-on-surface-variant font-light leading-relaxed text-sm">
                 Fórmula de liga consistente desenvolvida para evitar empastamento prematuro, mantendo a produtividade máxima e previsibilidade na linha.
               </p>
             </div>
-            <div className="p-12 flex flex-col items-start bg-surface-container-low group hover:bg-surface-variant transition-colors duration-500">
-              <div className="p-4 bg-white mb-8 group-hover:bg-surface-container transition-colors">
-                <Truck size={36} className="text-primary" />
+            <div className="p-8 sm:p-12 flex flex-col items-start bg-surface-container-low group hover:bg-surface-variant transition-colors duration-500">
+              <div className="p-4 bg-white mb-6 sm:mb-8 group-hover:bg-surface-container transition-colors">
+                <Truck size={32} sm:size={36} className="text-primary" />
               </div>
-              <h3 className="text-xl font-black uppercase tracking-tight mb-6">Logística Estratégica</h3>
+              <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight mb-4 sm:mb-6">Logística Estratégica</h3>
               <p className="text-on-surface-variant font-light leading-relaxed text-sm">
                 Produção e estoque centralizado em Indaiatuba-SP. Garantimos entrega ágil para os principais polos industriais, mitigando riscos de máquina parada.
               </p>
@@ -128,57 +244,57 @@ export default function App() {
         </section>
 
         {/* Homologation Protocol Section */}
-        <section className="bg-surface-container-high py-32 px-6 md:px-12 overflow-hidden" id="protocolo">
+        <section className="bg-surface-container-high py-20 md:py-32 px-4 sm:px-6 md:px-12 overflow-hidden" id="protocolo">
           <div className="max-w-[1440px] mx-auto">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mb-24"
+              className="mb-16 md:mb-24"
             >
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Protocolo Operacional</span>
-              <h2 className="text-4xl md:text-6xl font-black uppercase text-monolith leading-none">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase text-monolith leading-tight md:leading-none">
                 Homologue sem Risco.<br />
                 <span className="text-transparent border-text font-outline-2 stroke-primary" style={{ WebkitTextStroke: '1px black' }}>Nosso processo em 3 passos.</span>
               </h2>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 lg:gap-20">
               {/* Step 1 */}
               <div className="relative">
-                <div className="text-[10rem] font-black text-white leading-none absolute -top-24 -left-6 select-none z-0 opacity-100">01</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-white leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0 opacity-100">01</div>
                 <div className="relative z-10 pt-4">
-                  <h4 className="text-xl font-black mb-6 uppercase tracking-tighter flex items-center gap-4">
-                    <span className="h-0.5 w-8 bg-primary"></span>
+                  <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
+                    <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
                     Raio-X Técnico
                   </h4>
-                  <p className="text-on-surface-variant leading-relaxed font-light">
+                  <p className="text-on-surface-variant leading-relaxed font-light text-sm sm:text-base">
                     Mapeamos integralmente seu processo, especificações de máquinas e os gargalos técnicos que impedem sua performance máxima.
                   </p>
                 </div>
               </div>
               {/* Step 2 */}
               <div className="relative">
-                <div className="text-[10rem] font-black text-white leading-none absolute -top-24 -left-6 select-none z-0 opacity-100">02</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-white leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0 opacity-100">02</div>
                 <div className="relative z-10 pt-4">
-                  <h4 className="text-xl font-black mb-6 uppercase tracking-tighter flex items-center gap-4">
-                    <span className="h-0.5 w-8 bg-primary"></span>
+                  <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
+                    <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
                     Try-Out Orientado
                   </h4>
-                  <p className="text-on-surface-variant leading-relaxed font-light">
+                  <p className="text-on-surface-variant leading-relaxed font-light text-sm sm:text-base">
                     Enviamos o Kit Try-Out com abrasivos customizados para seu material, acompanhado de parâmetros de corte calculados por nossos engenheiros.
                   </p>
                 </div>
               </div>
               {/* Step 3 */}
-              <div className="relative">
-                <div className="text-[10rem] font-black text-white leading-none absolute -top-24 -left-6 select-none z-0 opacity-100">03</div>
+              <div className="relative md:col-span-2 lg:col-span-1">
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-white leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0 opacity-100">03</div>
                 <div className="relative z-10 pt-4">
-                  <h4 className="text-xl font-black mb-6 uppercase tracking-tighter flex items-center gap-4">
-                    <span className="h-0.5 w-8 bg-primary"></span>
+                  <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
+                    <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
                     Validação Matemática
                   </h4>
-                  <p className="text-on-surface-variant leading-relaxed font-light">
+                  <p className="text-on-surface-variant leading-relaxed font-light text-sm sm:text-base">
                     Acompanhamos o teste in-loco e entregamos um relatório técnico detalhado provando a redução real no custo por peça usinada.
                   </p>
                 </div>
@@ -188,150 +304,222 @@ export default function App() {
         </section>
 
         {/* Form Section */}
-        <section className="bg-white py-32 px-6 md:px-12">
-          <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div>
-              <h2 className="text-4xl md:text-5xl font-black uppercase text-monolith mb-12">Raio-X de Processo</h2>
-              <p className="text-on-surface-variant mb-12 text-lg font-light leading-relaxed">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 md:mb-12">Raio-X de Processo</h2>
+              <p className="text-on-surface-variant mb-8 md:mb-12 text-base sm:text-lg font-light leading-relaxed">
                 Inicie o protocolo de homologação preenchendo os dados técnicos do seu desafio atual. Nossa equipe de engenharia de aplicação analisará os dados em até 24h.
               </p>
-              <div className="space-y-6">
-                <div className="flex items-center gap-6 py-6 border-b border-outline-variant/20">
+              <div className="space-y-4 md:space-y-6">
+                <div className="flex items-center gap-4 sm:gap-6 py-4 sm:py-6 border-b border-outline-variant/20">
                   <CheckCircle2 size={24} className="text-primary flex-shrink-0" />
-                  <span className="text-xs font-bold uppercase tracking-widest">Análise de Rugosidade Gratuita</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Análise de Rugosidade Gratuita</span>
                 </div>
-                <div className="flex items-center gap-6 py-6 border-b border-outline-variant/20">
+                <div className="flex items-center gap-4 sm:gap-6 py-4 sm:py-6 border-b border-outline-variant/20">
                   <CheckCircle2 size={24} className="text-primary flex-shrink-0" />
-                  <span className="text-xs font-bold uppercase tracking-widest">Cálculo de Custo por Peça</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest">Cálculo de Custo por Peça</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-surface-container-low p-8 md:p-12 ghost-border">
-              <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="flex flex-col gap-3">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">Nome</label>
-                    <input 
-                      className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm placeholder:text-outline-variant/50" 
-                      placeholder="Seu nome completo" 
-                      type="text" 
-                    />
+            <div className="bg-surface-container-low p-6 sm:p-8 md:p-12 ghost-border">
+              {isSubmitted ? (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="h-full flex flex-col items-center justify-center text-center py-16 sm:py-20"
+                >
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary text-white flex items-center justify-center mb-8">
+                    <CheckCircle2 size={40} sm:size={48} />
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">Empresa</label>
-                    <input 
-                      className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm" 
-                      placeholder="Nome da organização" 
-                      type="text" 
-                    />
+                  <h3 className="text-xl sm:text-2xl font-black uppercase mb-4">Protocolo Iniciado</h3>
+                  <p className="text-on-surface-variant font-light text-sm sm:text-base">Seus dados foram enviados com sucesso.<br />Nossa engenharia entrará em contato em breve.</p>
+                </motion.div>
+              ) : (
+                <form className="space-y-6 sm:space-y-8" onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Nome</label>
+                      <input 
+                        name="nome"
+                        value={formData.nome}
+                        onChange={handleChange}
+                        onBlur={() => handleBlur("nome")}
+                        className={`bg-transparent border-0 border-b ${touched.nome && errors.nome ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm placeholder:text-outline-variant/50 outline-none`}
+                        placeholder="Seu nome completo" 
+                        type="text" 
+                      />
+                      {renderError("nome")}
+                    </div>
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Empresa</label>
+                      <input 
+                        name="empresa"
+                        value={formData.empresa}
+                        onChange={handleChange}
+                        onBlur={() => handleBlur("empresa")}
+                        className={`bg-transparent border-0 border-b ${touched.empresa && errors.empresa ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
+                        placeholder="Nome da organização" 
+                        type="text" 
+                      />
+                      {renderError("empresa")}
+                    </div>
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">WhatsApp</label>
+                      <input 
+                        name="whatsapp"
+                        value={formData.whatsapp}
+                        onChange={handleChange}
+                        onBlur={() => handleBlur("whatsapp")}
+                        className={`bg-transparent border-0 border-b ${touched.whatsapp && errors.whatsapp ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
+                        placeholder="(00) 00000-0000" 
+                        type="tel" 
+                      />
+                      {renderError("whatsapp")}
+                    </div>
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">E-mail Corporativo</label>
+                      <input 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onBlur={() => handleBlur("email")}
+                        className={`bg-transparent border-0 border-b ${touched.email && errors.email ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
+                        placeholder="email@empresa.com.br" 
+                        type="email" 
+                      />
+                      {renderError("email")}
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">WhatsApp</label>
-                    <input 
-                      className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm" 
-                      placeholder="(00) 00000-0000" 
-                      type="tel" 
-                    />
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">E-mail Corporativo</label>
-                    <input 
-                      className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm" 
-                      placeholder="email@empresa.com.br" 
-                      type="email" 
-                    />
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="flex flex-col gap-3">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">Material usinado</label>
-                    <select className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm appearance-none cursor-pointer">
-                      <option>Ferro Fundido</option>
-                      <option>Aço Temperado</option>
-                      <option>Alumínio</option>
-                      <option>Outros</option>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Material usinado</label>
+                      <select 
+                        name="material"
+                        value={formData.material}
+                        onChange={handleChange}
+                        className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm appearance-none cursor-pointer outline-none"
+                      >
+                        <option>Ferro Fundido</option>
+                        <option>Aço Temperado</option>
+                        <option>Alumínio</option>
+                        <option>Outros</option>
+                      </select>
+                    </div>
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Marca da máquina</label>
+                      <input 
+                        name="marcaMaquina"
+                        value={formData.marcaMaquina}
+                        onChange={handleChange}
+                        onBlur={() => handleBlur("marcaMaquina")}
+                        className={`bg-transparent border-0 border-b ${touched.marcaMaquina && errors.marcaMaquina ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
+                        placeholder="Ex: Sunnen, Gehring, Nagel" 
+                        type="text" 
+                      />
+                      {renderError("marcaMaquina")}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Rugosidade Ra/Rz</label>
+                    <input 
+                      name="rugosidade"
+                      value={formData.rugosidade}
+                      onChange={handleChange}
+                      onBlur={() => handleBlur("rugosidade")}
+                      className={`bg-transparent border-0 border-b ${touched.rugosidade && errors.rugosidade ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
+                      placeholder="Especificação técnica do desenho" 
+                      type="text" 
+                    />
+                    {renderError("rugosidade")}
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Principal desafio</label>
+                    <select 
+                      name="desafio"
+                      value={formData.desafio}
+                      onChange={handleChange}
+                      className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm appearance-none cursor-pointer outline-none"
+                    >
+                      <option>Reduzir custo por peça</option>
+                      <option>Aumentar vida útil do abrasivo</option>
+                      <option>Garantir rugosidade constante</option>
+                      <option>Melhorar tempo de ciclo</option>
                     </select>
                   </div>
-                  <div className="flex flex-col gap-3">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">Marca da máquina</label>
-                    <input 
-                      className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm" 
-                      placeholder="Ex: Sunnen, Gehring, Nagel" 
-                      type="text" 
-                    />
-                  </div>
-                </div>
 
-                <div className="flex flex-col gap-3">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">Rugosidade Ra/Rz</label>
-                  <input 
-                    className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm" 
-                    placeholder="Especificação técnica do desenho" 
-                    type="text" 
-                  />
-                </div>
-
-                <div className="flex flex-col gap-3">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline">Principal desafio</label>
-                  <select className="bg-transparent border-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all p-2 text-sm appearance-none cursor-pointer">
-                    <option>Reduzir custo por peça</option>
-                    <option>Aumentar vida útil do abrasivo</option>
-                    <option>Garantir rugosidade constante</option>
-                    <option>Melhorar tempo de ciclo</option>
-                  </select>
-                </div>
-
-                <button className="w-full btn-machined text-white py-6 font-bold uppercase tracking-[0.2em] mt-8 group">
-                  Enviar para Diagnóstico
-                </button>
-              </form>
+                  <button 
+                    type="submit"
+                    className="w-full btn-machined text-white py-5 sm:py-6 font-bold uppercase tracking-[0.2em] mt-4 md:mt-8 group flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Enviar para Diagnóstico
+                    <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </section>
       </main>
 
       {/* Footer Section */}
-      <footer className="bg-primary text-white w-full px-6 md:px-12 py-24 flex flex-col gap-24 font-sans tracking-tight" id="contato">
-        <div className="max-w-[1440px] mx-auto w-full flex flex-col md:flex-row justify-between items-start gap-16">
-          <div className="space-y-8 max-w-sm">
-            <div className="text-3xl font-black">INACOM</div>
+      <footer className="bg-primary text-white w-full px-4 sm:px-6 md:px-12 py-16 md:py-24 flex flex-col gap-16 md:gap-24 font-sans tracking-tight" id="contato">
+        <div className="max-w-[1440px] mx-auto w-full flex flex-col md:flex-row justify-between items-start gap-12 sm:gap-16">
+          <div className="space-y-6 sm:space-y-8 max-w-sm">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <img 
+                src="https://i.ibb.co/s9z8M4jb/Chat-GPT-Image-16-de-abr-de-2026-16-23-25.png" 
+                alt="INACOM Industrial Precision" 
+                className="h-8 sm:h-10 w-auto object-contain invert brightness-0"
+                referrerPolicy="no-referrer"
+              />
+              <span className="text-2xl sm:text-3xl font-black text-white">INACOM</span>
+            </div>
             <p className="text-outline-variant text-sm font-light normal-case">
               Performance em Corte Industrial. Especialistas em brunimento e abrasivos de alta precisão com tecnologia alemã aplicada ao mercado brasileiro.
             </p>
-            <div className="flex flex-col gap-4 text-xs tracking-widest uppercase">
+            <div className="flex flex-col gap-4 text-[10px] sm:text-xs tracking-widest uppercase">
               <span className="flex items-center gap-3"><Phone size={14} className="text-outline-variant" /> +55 (19) 3000-0000</span>
               <span className="flex items-center gap-3"><Mail size={14} className="text-outline-variant" /> tech@inacom.com.br</span>
               <span className="flex items-center gap-3"><Building2 size={14} className="text-outline-variant" /> vendas@inacom.com.br</span>
             </div>
           </div>
           
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-16 md:gap-24">
-            <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-10 sm:gap-16">
+            <div className="flex flex-col gap-4 sm:gap-6">
               <h5 className="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-4">Legal</h5>
-              <div className="flex flex-col gap-4 text-xs text-outline-variant uppercase tracking-widest">
+              <div className="flex flex-col gap-4 text-[10px] text-outline-variant uppercase tracking-widest">
                 <a className="hover:text-white transition-colors" href="#">Privacy Policy</a>
                 <a className="hover:text-white transition-colors" href="#">Terms of Service</a>
                 <a className="hover:text-white transition-colors" href="#">Compliance</a>
               </div>
             </div>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4 sm:gap-6">
               <h5 className="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-4">Empresa</h5>
-              <div className="flex flex-col gap-4 text-xs text-outline-variant uppercase tracking-widest">
+              <div className="flex flex-col gap-4 text-[10px] text-outline-variant uppercase tracking-widest">
                 <a className="hover:text-white transition-colors" href="#">Indaiatuba - SP</a>
-                <a className="hover:text-white transition-colors" href="#">Global Support</a>
+                <a className="hover:text-white transition-colors" href="#">Support</a>
                 <a className="hover:text-white transition-colors" href="#">Protocolos</a>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="max-w-[1440px] mx-auto w-full pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4 items-center text-[10px] text-outline/50 uppercase tracking-[0.2em] font-bold">
+        <div className="max-w-[1440px] mx-auto w-full pt-12 md:pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between gap-6 items-center text-[10px] text-outline/50 uppercase tracking-[0.2em] font-bold text-center md:text-left">
           <p>© 2024 INACOM INDUSTRIAL LOGIC. ALL RIGHTS RESERVED.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors underline underline-offset-4">Instagram</a>
-            <a href="#" className="hover:text-white transition-colors underline underline-offset-4">LinkedIn</a>
+          <div className="flex gap-6 sm:gap-8">
+            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors">
+              <Instagram size={14} />
+              <span className="underline underline-offset-4">Instagram</span>
+            </a>
+            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors">
+              <Linkedin size={14} />
+              <span className="underline underline-offset-4">LinkedIn</span>
+            </a>
           </div>
         </div>
       </footer>
