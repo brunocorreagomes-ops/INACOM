@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-tertiary: #393c3f;
+  --color-on-background: #191c1d;
+  --color-surface-container-low: #f3f4f5;
+  --color-secondary-fixed-dim: #ababad;
+  --color-on-tertiary-container: #ffffff;
+  --color-inverse-surface: #2e3132;
+  --color-surface-container-lowest: #ffffff;
+  --color-background: #f8f9fa;
+  --color-surface: #f8f9fa;
+  --color-on-surface: #191c1d;
+  --color-on-error-container: #410002;
+  --color-primary-fixed-dim: #474747;
+  --color-surface-bright: #f8f9fa;
+  --color-on-primary-container: #ffffff;
+  --color-tertiary-fixed-dim: #44474a;
+  --color-on-primary: #e2e2e2;
+  --color-on-secondary-fixed-variant: #3a3b3d;
+  --color-inverse-primary: #c6c6c6;
+  --color-surface-variant: #e1e3e4;
+  --color-error: #ba1a1a;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d5d4d6;
+  --color-on-error: #ffffff;
+  --color-inverse-on-surface: #f0f1f2;
+  --color-secondary-fixed: #c7c6c8;
+  --color-surface-dim: #d9dadb;
+  --color-on-secondary-fixed: #1a1c1d;
+  --color-error-container: #ffdad6;
+  --color-on-tertiary-fixed-variant: #e1e2e6;
+  --color-on-secondary-container: #1a1c1d;
+  --color-outline: #777777;
+  --color-surface-container: #edeeef;
+  --color-on-tertiary-fixed: #ffffff;
+  --color-primary: #000000;
+  --color-on-primary-fixed-variant: #e2e2e2;
+  --color-on-primary-fixed: #ffffff;
+  --color-primary-container: #3b3b3b;
+  --color-surface-container-high: #e7e8e9;
+  --color-tertiary-fixed: #5c5f62;
+  --color-on-surface-variant: #474747;
+  --color-outline-variant: #c6c6c6;
+  --color-on-tertiary: #e1e2e6;
+  --color-secondary: #5e5e60;
+  --color-tertiary-container: #727578;
+  --color-surface-container-highest: #e1e3e4;
+  --color-surface-tint: #5e5e5e;
+  --color-primary-fixed: #5e5e5e;
+}
+
+@layer utilities {
+  .text-monolith {
+    letter-spacing: -0.02em;
+  }
+  
+  .btn-machined {
+    background: linear-gradient(45deg, #000000, #3b3b3b);
+    transition: all 150ms ease-out;
+  }
+  
+  .btn-machined:hover {
+    opacity: 0.9;
+  }
+  
+  .ghost-border {
+    outline: 1px solid rgba(198, 198, 198, 0.15);
+  }
+
+  /* Force hard edges everywhere as per design system */
+  * {
+    border-radius: 0 !important;
+  }
+}
+
+body {
+  @apply bg-background text-on-background antialiased overflow-x-hidden font-sans;
+}
