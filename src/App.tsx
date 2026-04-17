@@ -14,9 +14,12 @@ import {
   Instagram,
   Linkedin,
   MapPin,
-  Play
+  Play,
+  Volume2,
+  VolumeX,
+  ArrowUp
 } from "lucide-react";
-import { useState, useMemo, ChangeEvent, FormEvent } from "react";
+import { useState, useMemo, ChangeEvent, FormEvent, useEffect, useRef } from "react";
 
 interface FormData {
   nome: string;
@@ -28,6 +31,7 @@ interface FormData {
   rugosidade: string;
   desafio: string;
   outroDesafio: string;
+  outroMaterial: string;
 }
 
 interface FormErrors {
@@ -36,6 +40,9 @@ interface FormErrors {
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [player, setPlayer] = useState<any>(null);
+  const [isMuted, setIsMuted] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     nome: "",
     empresa: "",
@@ -46,6 +53,7 @@ export default function App() {
     rugosidade: "",
     desafio: "Reduzir custo por peça",
     outroDesafio: "",
+    outroMaterial: "",
   });
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -78,6 +86,11 @@ export default function App() {
           if (!value.trim()) return "Descreva o seu desafio";
         }
         return undefined;
+      case "outroMaterial":
+        if (formData.material === "Outros") {
+          if (!value.trim()) return "Descreva o material";
+        }
+        return undefined;
       default:
         return undefined;
     }
@@ -96,9 +109,12 @@ export default function App() {
     const { name, value } = e.target;
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
-      // Limpa o campo 'outroDesafio' se a opção selecionada for alterada
+      // Limpa os campos 'outro' se a opção selecionada for alterada
       if (name === "desafio" && value !== "Outro desafio. Especificar") {
         newData.outroDesafio = "";
+      }
+      if (name === "material" && value !== "Outros") {
+        newData.outroMaterial = "";
       }
       return newData;
     });
@@ -118,6 +134,65 @@ export default function App() {
       // Logic for sending data would go here
       setTimeout(() => setIsSubmitted(false), 5000);
     }
+  };
+
+  useEffect(() => {
+    let interval: any;
+    const initPlayer = () => {
+      if ((window as any).YT && (window as any).YT.Player) {
+        new (window as any).YT.Player('youtube-player', {
+          videoId: 'uESr_l5TUfg',
+          playerVars: {
+            autoplay: 0,
+            mute: 1,
+            controls: 1,
+            rel: 0,
+            modestbranding: 1,
+            enablejsapi: 1
+          },
+          events: {
+            'onReady': (event: any) => {
+              setPlayer(event.target);
+            }
+          }
+        });
+        clearInterval(interval);
+      }
+    };
+
+    if (!(window as any).YT) {
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.body.appendChild(tag);
+      interval = setInterval(initPlayer, 100);
+    } else {
+      initPlayer();
+    }
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleUnmute = () => {
+    if (player) {
+      player.unMute();
+      setIsMuted(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToHero = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollToForm = () => {
+    document.getElementById("pedido-orcamento")?.scrollIntoView({ behavior: "smooth" });
   };
 
   const renderError = (name: string) => {
@@ -218,7 +293,10 @@ export default function App() {
               <p className="text-on-primary text-sm sm:text-base md:text-xl font-light mb-8 md:mb-12 max-w-xl border-l-2 border-primary-fixed-dim pl-6 md:pl-8 leading-relaxed">
                 Ferramentas abrasivas de alta precisão desenhadas para estabilidade de processo, alcance exato de rugosidade e redução de custo por peça.
               </p>
-              <button className="btn-machined text-white px-8 md:px-12 py-4 md:py-6 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] inline-flex items-center gap-4 group">
+              <button 
+                onClick={scrollToForm}
+                className="btn-machined text-white px-8 md:px-12 py-4 md:py-6 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] inline-flex items-center gap-4 group"
+              >
                 Solicitar Kit Try-Out
                 <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </button>
@@ -389,7 +467,7 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 lg:gap-20">
               {/* Step 1 */}
               <div className="relative">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline/40 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">01</div>
+                <div className="text-5xl sm:text-7xl lg:text-[8rem] font-black text-outline/40 leading-none absolute -top-8 sm:-top-16 -left-2 sm:-left-4 select-none z-0">01</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -402,7 +480,7 @@ export default function App() {
               </div>
               {/* Step 2 */}
               <div className="relative">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline/40 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">02</div>
+                <div className="text-5xl sm:text-7xl lg:text-[8rem] font-black text-outline/40 leading-none absolute -top-8 sm:-top-16 -left-2 sm:-left-4 select-none z-0">02</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -415,7 +493,7 @@ export default function App() {
               </div>
               {/* Step 3 */}
               <div className="relative md:col-span-2 lg:col-span-1">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline/40 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">03</div>
+                <div className="text-5xl sm:text-7xl lg:text-[8rem] font-black text-outline/40 leading-none absolute -top-8 sm:-top-16 -left-2 sm:-left-4 select-none z-0">03</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -443,16 +521,25 @@ export default function App() {
               <div className="h-1 w-24 bg-primary mx-auto"></div>
             </motion.div>
             
-            <div className="relative w-full max-w-5xl mx-auto aspect-video ghost-border overflow-hidden bg-surface-container">
-              <iframe 
-                className="absolute inset-0 w-full h-full"
-                src="https://www.youtube.com/embed/uESr_l5TUfg" 
-                title="Apresentação INACOM" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowFullScreen
-              ></iframe>
-            </div>
+            <motion.div 
+              onViewportEnter={() => player?.playVideo()}
+              onViewportLeave={() => player?.pauseVideo()}
+              className="relative w-full max-w-5xl mx-auto aspect-video ghost-border overflow-hidden bg-surface-container"
+            >
+              <div id="youtube-player" className="absolute inset-0 w-full h-full"></div>
+              {isMuted && player && (
+                <div 
+                  onClick={handleUnmute}
+                  className="absolute inset-0 z-20 cursor-pointer flex flex-col items-center justify-center bg-black/10 group transition-colors hover:bg-black/20"
+                >
+                  <div className="bg-primary/90 p-4 sm:p-6 rounded-full text-white backdrop-blur-md shadow-2xl transform transition-all group-hover:scale-110 flex items-center gap-3">
+                    <VolumeX size={24} />
+                    <span className="text-[10px] sm:text-xs uppercase font-black tracking-[0.2em]">Ativar Som</span>
+                  </div>
+                  <p className="text-white text-[9px] uppercase tracking-widest mt-6 opacity-60 font-bold group-hover:opacity-100 transition-opacity">Vídeo em Autoplay Ativado</p>
+                </div>
+              )}
+            </motion.div>
             
             <div className="mt-8 text-center">
               <p className="text-on-surface-variant font-light italic text-sm sm:text-base">
@@ -463,7 +550,7 @@ export default function App() {
         </section>
 
         {/* Form Section */}
-        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12" id="pedido-orcamento">
           <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 md:mb-12">Solicite orçamento personalizado para seu projeto.</h2>
@@ -567,6 +654,27 @@ export default function App() {
                         <option>Outros</option>
                       </select>
                     </div>
+
+                    {formData.material === "Outros" && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        className="flex flex-col"
+                      >
+                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Especifique o material</label>
+                        <input 
+                          name="outroMaterial"
+                          value={formData.outroMaterial}
+                          onChange={handleChange}
+                          onBlur={() => handleBlur("outroMaterial")}
+                          className={`bg-transparent border-0 border-b ${touched.outroMaterial && errors.outroMaterial ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
+                          placeholder="Qual material você usa?" 
+                          type="text" 
+                        />
+                        {renderError("outroMaterial")}
+                      </motion.div>
+                    )}
+
                     <div className="flex flex-col">
                       <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Marca da máquina</label>
                       <input 
@@ -671,6 +779,19 @@ export default function App() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-10 sm:gap-16">
             <div className="flex flex-col gap-4 sm:gap-6">
+              <h5 className="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-4">Social</h5>
+              <div className="flex flex-col gap-4 text-[10px] text-outline-variant uppercase tracking-widest">
+                <a href="#" className="flex items-center gap-2 hover:text-white transition-colors" aria-label="Acessar o perfil da INACOM no Instagram">
+                  <Instagram size={14} />
+                  <span>Instagram</span>
+                </a>
+                <a href="#" className="flex items-center gap-2 hover:text-white transition-colors" aria-label="Acessar o perfil da INACOM no LinkedIn">
+                  <Linkedin size={14} />
+                  <span>LinkedIn</span>
+                </a>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4 sm:gap-6">
               <h5 className="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-4">Legal</h5>
               <div className="flex flex-col gap-4 text-[10px] text-outline-variant uppercase tracking-widest">
                 <a className="hover:text-white transition-colors" href="#">Privacy Policy</a>
@@ -678,35 +799,62 @@ export default function App() {
                 <a className="hover:text-white transition-colors" href="#">Compliance</a>
               </div>
             </div>
-            <div className="flex flex-col gap-4 sm:gap-6">
-              <h5 className="text-white font-black text-xs uppercase tracking-widest border-b border-white/10 pb-4">Empresa</h5>
-              <div className="flex flex-col gap-4 text-[10px] text-outline-variant uppercase tracking-widest">
-                <div className="flex flex-col gap-1">
-                  <span className="text-white/40">Localização</span>
-                  <span className="normal-case font-light">R. Pérola, 783 - Recreio Campestre Jóia</span>
-                  <span className="normal-case font-light">Indaiatuba - SP, 13347-150</span>
-                </div>
-                <a className="hover:text-white transition-colors" href="#">Support</a>
-                <a className="hover:text-white transition-colors" href="#">Protocolos</a>
-              </div>
-            </div>
           </div>
         </div>
         
         <div className="max-w-[1440px] mx-auto w-full pt-12 md:pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between gap-6 items-center text-[10px] text-outline/50 uppercase tracking-[0.2em] font-bold text-center md:text-left">
-          <p>© 2024 INACOM INDUSTRIAL LOGIC. ALL RIGHTS RESERVED.</p>
-          <div className="flex gap-6 sm:gap-8">
-            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors" aria-label="Acessar o perfil da INACOM no Instagram">
-              <Instagram size={14} />
-              <span className="underline underline-offset-4">Instagram</span>
-            </a>
-            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors" aria-label="Acessar o perfil da INACOM no LinkedIn">
-              <Linkedin size={14} />
-              <span className="underline underline-offset-4">LinkedIn</span>
-            </a>
-          </div>
+          <p>
+            © 2026 INACOM. DESENVOLVIDO POR <a href="https://www.orvalia.com.br" className="text-[#40E0D0] hover:brightness-110 transition-all font-black" target="_blank" rel="noopener noreferrer">ORVALIA STUDIO</a>
+            <span className="block md:inline md:ml-2">ALL RIGHTS RESERVED</span>
+          </p>
         </div>
       </footer>
+
+      {/* Floating Buttons */}
+      <div className="fixed bottom-6 right-6 z-[60] flex flex-col gap-4 items-end pointer-events-none">
+        {/* Scroll to Top */}
+        <AnimatePresence>
+          {showScrollTop && (
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              onClick={scrollToHero}
+              className="p-4 bg-monolith text-white shadow-2xl hover:bg-primary transition-all pointer-events-auto"
+              aria-label="Voltar ao topo"
+            >
+              <ArrowUp size={20} />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Fixed Sticky Call to Action (Bottom Bar) */}
+      <div className="fixed bottom-0 left-0 w-full bg-monolith/95 backdrop-blur-md border-t border-white/10 p-4 z-[55] flex justify-between items-center lg:hidden">
+        <div className="flex flex-col">
+          <span className="text-[8px] font-black uppercase tracking-widest text-primary">Solicite Agora</span>
+          <span className="text-[10px] font-bold text-white uppercase tracking-tight">Kit Try-Out Industrial</span>
+        </div>
+        <button 
+          onClick={scrollToForm}
+          className="bg-primary text-white px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-primary-container"
+        >
+          Solicitar
+        </button>
+      </div>
+
+      {/* Desktop Fixed Side CTA */}
+      <div className="hidden lg:block fixed bottom-8 left-8 z-[55]">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={scrollToForm}
+          className="bg-primary text-white p-6 md:p-8 shadow-2xl flex flex-col items-center gap-2 group border border-white/20"
+        >
+          <Zap size={24} className="group-hover:animate-pulse" />
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] vertical-text">Try-Out</span>
+        </motion.button>
+      </div>
     </div>
   );
 }
