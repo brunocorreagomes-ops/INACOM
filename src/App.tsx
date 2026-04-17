@@ -27,6 +27,7 @@ interface FormData {
   marcaMaquina: string;
   rugosidade: string;
   desafio: string;
+  outroDesafio: string;
 }
 
 interface FormErrors {
@@ -44,6 +45,7 @@ export default function App() {
     marcaMaquina: "",
     rugosidade: "",
     desafio: "Reduzir custo por peça",
+    outroDesafio: "",
   });
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -70,6 +72,9 @@ export default function App() {
         return undefined;
       case "rugosidade":
         if (!value.trim()) return "Especificação de rugosidade é obrigatória";
+        return undefined;
+      case "outroDesafio":
+        if (formData.desafio === "Outro desafio. Especificar" && !value.trim()) return "Descreva o seu desafio";
         return undefined;
       default:
         return undefined;
@@ -254,6 +259,14 @@ export default function App() {
               viewport={{ once: true }}
             >
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Excelência Industrial</span>
+              <div className="mb-10 ghost-border overflow-hidden aspect-video">
+                <img 
+                  src="https://i.ibb.co/zT4JTfv8/Captura-de-tela-2026-04-16-203650.png" 
+                  alt="A Empresa INACOM" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 leading-tight">
                 Qualidade excepcional e inovação constante.
               </h2>
@@ -268,9 +281,9 @@ export default function App() {
             </motion.div>
             <div className="relative aspect-square lg:aspect-video ghost-border overflow-hidden">
                <img 
-                src="https://picsum.photos/seed/precision/1200/800" 
-                alt="INACOM Industrial Facility" 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                src="https://i.ibb.co/zHsJMftt/Captura-de-tela-2026-04-16-195954.png" 
+                alt="INACOM Abrasivos" 
+                className="w-full h-full object-cover transition-all duration-700"
                 referrerPolicy="no-referrer"
                />
                <div className="absolute bottom-0 left-0 bg-primary text-white p-6 md:p-10 max-w-xs">
@@ -417,7 +430,7 @@ export default function App() {
               viewport={{ once: true }}
               className="text-center mb-12 md:mb-16"
             >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-4">Apresentação Técnica</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-4">Nossa Linha</h2>
               <div className="h-1 w-24 bg-primary mx-auto"></div>
             </motion.div>
             
@@ -586,8 +599,29 @@ export default function App() {
                       <option>Aumentar vida útil do abrasivo</option>
                       <option>Garantir rugosidade constante</option>
                       <option>Melhorar tempo de ciclo</option>
+                      <option>Outro desafio. Especificar</option>
                     </select>
                   </div>
+
+                  {formData.desafio === "Outro desafio. Especificar" && (
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      className="flex flex-col"
+                    >
+                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Descreva seu desafio</label>
+                      <input 
+                        name="outroDesafio"
+                        value={formData.outroDesafio}
+                        onChange={handleChange}
+                        onBlur={() => handleBlur("outroDesafio")}
+                        className={`bg-transparent border-0 border-b ${touched.outroDesafio && errors.outroDesafio ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
+                        placeholder="Digite aqui o desafio técnico da sua linha" 
+                        type="text" 
+                      />
+                      {renderError("outroDesafio")}
+                    </motion.div>
+                  )}
 
                   <button 
                     type="submit"
