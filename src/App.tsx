@@ -74,7 +74,9 @@ export default function App() {
         if (!value.trim()) return "Especificação de rugosidade é obrigatória";
         return undefined;
       case "outroDesafio":
-        if (formData.desafio === "Outro desafio. Especificar" && !value.trim()) return "Descreva o seu desafio";
+        if (formData.desafio === "Outro desafio. Especificar") {
+          if (!value.trim()) return "Descreva o seu desafio";
+        }
         return undefined;
       default:
         return undefined;
@@ -92,7 +94,14 @@ export default function App() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const newData = { ...prev, [name]: value };
+      // Limpa o campo 'outroDesafio' se a opção selecionada for alterada
+      if (name === "desafio" && value !== "Outro desafio. Especificar") {
+        newData.outroDesafio = "";
+      }
+      return newData;
+    });
   };
 
   const handleBlur = (name: string) => {
@@ -380,7 +389,7 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 lg:gap-20">
               {/* Step 1 */}
               <div className="relative">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline-variant/30 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">01</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline/40 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">01</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -393,7 +402,7 @@ export default function App() {
               </div>
               {/* Step 2 */}
               <div className="relative">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline-variant/30 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">02</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline/40 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">02</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -406,7 +415,7 @@ export default function App() {
               </div>
               {/* Step 3 */}
               <div className="relative md:col-span-2 lg:col-span-1">
-                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline-variant/30 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">03</div>
+                <div className="text-6xl sm:text-8xl lg:text-[10rem] font-black text-outline/40 leading-none absolute -top-12 sm:-top-24 -left-3 sm:-left-6 select-none z-0">03</div>
                 <div className="relative z-10 pt-4">
                   <h4 className="text-lg sm:text-xl font-black mb-4 sm:mb-6 uppercase tracking-tighter flex items-center gap-4">
                     <span className="h-0.5 w-6 sm:w-8 bg-primary"></span>
@@ -687,11 +696,11 @@ export default function App() {
         <div className="max-w-[1440px] mx-auto w-full pt-12 md:pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between gap-6 items-center text-[10px] text-outline/50 uppercase tracking-[0.2em] font-bold text-center md:text-left">
           <p>© 2024 INACOM INDUSTRIAL LOGIC. ALL RIGHTS RESERVED.</p>
           <div className="flex gap-6 sm:gap-8">
-            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors" aria-label="Acessar o perfil da INACOM no Instagram">
               <Instagram size={14} />
               <span className="underline underline-offset-4">Instagram</span>
             </a>
-            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors">
+            <a href="#" className="flex items-center gap-2 hover:text-white transition-colors" aria-label="Acessar o perfil da INACOM no LinkedIn">
               <Linkedin size={14} />
               <span className="underline underline-offset-4">LinkedIn</span>
             </a>
