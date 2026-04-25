@@ -17,7 +17,13 @@ import {
   Play,
   Volume2,
   VolumeX,
-  ArrowUp
+  Settings,
+  MessageCircle,
+  HelpCircle,
+  BarChart3,
+  Globe,
+  ArrowUp,
+  FileText
 } from "lucide-react";
 import { useState, useMemo, ChangeEvent, FormEvent, useEffect, useRef } from "react";
 
@@ -43,6 +49,7 @@ export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [player, setPlayer] = useState<any>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     nome: "",
     empresa: "",
@@ -72,8 +79,9 @@ export default function App() {
         if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value)) return "Formato inválido: (00) 00000-0000";
         return undefined;
       case "email":
-        if (!value.trim()) return "E-mail é obrigatório";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "E-mail inválido";
+        if (!value.trim()) return "E-mail corporativo é obrigatório";
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(value.trim())) return "Por favor, insira um e-mail válido";
         return undefined;
       case "marcaMaquina":
         if (!value.trim()) return "Marca da máquina é obrigatória";
@@ -82,8 +90,8 @@ export default function App() {
         if (!value.trim()) return "Especificação de rugosidade é obrigatória";
         return undefined;
       case "outroDesafio":
-        if (formData.desafio === "Outro desafio. Especificar") {
-          if (!value.trim()) return "Descreva o seu desafio";
+        if (formData.desafio === "Outro desafio. Especificar" && !value.trim()) {
+          return "Descreva o seu desafio";
         }
         return undefined;
       case "outroMaterial":
@@ -107,14 +115,23 @@ export default function App() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+
+    // Ativa a validação em tempo real para dar feedback imediato enquanto o usuário digita
+    const realTimeFields = ["whatsapp", "email", "nome", "empresa", "marcaMaquina", "rugosidade", "outroDesafio", "outroMaterial"];
+    if (realTimeFields.includes(name)) {
+      setTouched((prev) => ({ ...prev, [name]: true }));
+    }
+
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
-      // Limpa os campos 'outro' se a opção selecionada for alterada
+      // Limpa os campos 'outro' e reseta o estado 'touched' se a opção selecionada for alterada
       if (name === "desafio" && value !== "Outro desafio. Especificar") {
         newData.outroDesafio = "";
+        setTouched(prevTouched => ({ ...prevTouched, outroDesafio: false }));
       }
       if (name === "material" && value !== "Outros") {
         newData.outroMaterial = "";
+        setTouched(prevTouched => ({ ...prevTouched, outroMaterial: false }));
       }
       return newData;
     });
@@ -199,11 +216,13 @@ export default function App() {
     if (touched[name] && errors[name]) {
       return (
         <motion.div 
+          id={`${name}-error`}
+          role="alert"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-2 text-error text-[10px] font-bold uppercase tracking-widest mt-2"
         >
-          <AlertCircle size={12} />
+          <AlertCircle size={12} aria-hidden="true" />
           {errors[name]}
         </motion.div>
       );
@@ -216,32 +235,41 @@ export default function App() {
       {/* Header Section */}
       <header className="bg-background/80 backdrop-blur-md sticky top-0 z-50 border-b border-outline-variant/10">
         <nav className="flex justify-between items-center w-full px-4 md:px-12 py-4 md:py-5 max-w-[1440px] mx-auto">
-          <a href="#inicio" className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <img 
-              src="https://i.ibb.co/s9z8M4jb/Chat-GPT-Image-16-de-abr-de-2026-16-23-25.png" 
-              alt="INACOM Industrial Precision" 
-              className="h-7 sm:h-8 md:h-10 w-auto object-contain"
-              referrerPolicy="no-referrer"
-            />
-            <span className="text-xl sm:text-2xl font-black tracking-tighter text-primary">
-              INACOM
+          <a href="#inicio" className="flex flex-col items-start leading-none group">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+              <img 
+                src="https://i.ibb.co/s9z8M4jb/Chat-GPT-Image-16-de-abr-de-2026-16-23-25.png" 
+                alt="INACOM - Precisão que se mede" 
+                className="h-7 sm:h-8 md:h-10 w-auto object-contain"
+                referrerPolicy="no-referrer"
+              />
+              <span className="text-xl sm:text-2xl font-black tracking-tighter text-primary">
+                INACOM
+              </span>
+            </div>
+            <span className="text-[7px] sm:text-[9px] font-black tracking-[0.3em] uppercase text-primary/60 ml-[36px] sm:ml-[44px] mt-1 group-hover:text-primary transition-colors">
+              Precisão que se mede
             </span>
           </a>
           
-          <div className="hidden lg:flex items-center gap-8 xl:gap-12">
-            <a className="text-primary font-bold border-b-2 border-primary pb-1 transition-all" href="#inicio">Início</a>
+          <div className="hidden lg:flex items-center gap-8 xl:gap-12" role="list">
+            <a className="text-primary font-bold border-b-2 border-primary pb-1 transition-all" href="#inicio" aria-current="page">Início</a>
             <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#protocolo">Protocolo de Homologação</a>
             <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#contato">Contato</a>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <button className="hidden sm:block bg-primary text-white px-4 md:px-6 py-2.5 md:py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary-container transition-colors shrink-0">
+            <button 
+              className="hidden sm:block bg-primary text-white px-4 md:px-6 py-2.5 md:py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary-container transition-colors shrink-0"
+              aria-label="Acessar Portal Técnico"
+            >
               Technical Portal
             </button>
             <button 
               className="lg:hidden p-2 text-primary"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Menu"
+              aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={isMenuOpen}
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -305,7 +333,8 @@ export default function App() {
         </section>
 
         {/* Authority Section */}
-        <section className="bg-surface py-16 md:py-24 px-4 sm:px-6 md:px-12">
+        <section className="bg-surface py-16 md:py-24 px-4 sm:px-6 md:px-12" aria-labelledby="authority-title">
+          <h2 id="authority-title" className="sr-only">Nossos Pilares de Autoridade</h2>
           <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-0 border-t border-outline-variant/15">
             <div className="p-8 sm:p-12 border-b lg:border-b-0 lg:border-r border-outline-variant/15 flex flex-col items-start bg-white group hover:bg-surface-container transition-colors duration-500">
               <div className="p-4 bg-surface-container-low mb-6 sm:mb-8 group-hover:bg-white transition-colors">
@@ -348,8 +377,8 @@ export default function App() {
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Excelência Industrial</span>
               <div className="mb-10 ghost-border overflow-hidden aspect-video">
                 <img 
-                  src="https://i.ibb.co/zT4JTfv8/Captura-de-tela-2026-04-16-203650.png" 
-                  alt="A Empresa INACOM" 
+                  src="https://i.ibb.co/0W9pcKz/INACOM-NOVA-FACHADA.webp" 
+                  alt="Fachada moderna da sede da INACOM com letreiro da empresa" 
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
@@ -369,7 +398,7 @@ export default function App() {
             <div className="relative aspect-square lg:aspect-video ghost-border overflow-hidden">
                <img 
                 src="https://i.ibb.co/zHsJMftt/Captura-de-tela-2026-04-16-195954.png" 
-                alt="INACOM Abrasivos" 
+                alt="Close-up em alta resolução de pedras abrasivas de precisão INACOM" 
                 className="w-full h-full object-cover transition-all duration-700"
                 referrerPolicy="no-referrer"
                />
@@ -524,9 +553,14 @@ export default function App() {
             <motion.div 
               onViewportEnter={() => player?.playVideo()}
               onViewportLeave={() => player?.pauseVideo()}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
               className="relative w-full max-w-5xl mx-auto aspect-video ghost-border overflow-hidden bg-surface-container"
             >
-              <div id="youtube-player" className="absolute inset-0 w-full h-full"></div>
+              <div 
+                id="youtube-player" 
+                className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${!isHovered && !isMuted ? 'pointer-events-none' : 'pointer-events-auto'}`}
+              ></div>
               {isMuted && player && (
                 <div 
                   onClick={handleUnmute}
@@ -545,6 +579,238 @@ export default function App() {
               <p className="text-on-surface-variant font-light italic text-sm sm:text-base">
                 Conheça nossa linha completa de produtos e soluções para brunimento industrial.
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Application Sectors Section */}
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12 border-b border-outline-variant/10">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="mb-16 md:mb-24">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Setores de Atuação</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight">
+                Onde a Precisão é <span className="text-primary text-monolith">Indispensável.</span>
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  sector: "Automotivo",
+                  task: "Brunimento de Cilindros e Bielas",
+                  desc: "Atingimos tolerâncias sub-mícron para garantir vedação perfeita e redução de atrito em motores de alta performance.",
+                  icon: <Cpu size={24} />
+                },
+                {
+                  sector: "Hidráulico & Pneumático",
+                  task: "Camisas de Pistão e Válvulas",
+                  desc: "Acabamento espelhado (Ra 0.05 - 0.15) para evitar vazamentos e prolongar a vida útil de vedações elastoméricas.",
+                  icon: <Settings size={24} />
+                },
+                {
+                  sector: "Linha Branca",
+                  task: "Compressores de Refrigeração",
+                  desc: "Alta produtividade em grandes lotes, mantendo a geometria perfeita para redução de ruído e vibração.",
+                  icon: <Zap size={24} />
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="p-8 md:p-10 bg-surface-container ghost-border group hover:bg-primary transition-all duration-500">
+                  <div className="mb-8 p-4 bg-white inline-block group-hover:text-primary transition-colors">
+                    {item.icon}
+                  </div>
+                  <h4 className="text-xl font-black uppercase mb-4 text-monolith group-hover:text-white transition-colors">{item.sector}</h4>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-primary group-hover:text-white/80 mb-6">{item.task}</p>
+                  <p className="text-on-surface-variant font-light text-sm leading-relaxed group-hover:text-white/90 transition-colors">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Provas Técnicas e Métricas Section */}
+        <section className="bg-monolith py-20 md:py-32 px-4 sm:px-6 md:px-12 text-white overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 translate-x-1/2"></div>
+          <div className="max-w-[1440px] mx-auto relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary block mb-4">Métricas de Performance</span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight mb-8">
+                  Dados que validam a nossa <span className="text-white/40">Engenharia.</span>
+                </h2>
+                <div className="grid grid-cols-2 gap-6 sm:gap-8">
+                  <div className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-primary">0.02μm</div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Rugosidade Ra Mínima</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-primary">35%</div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Redução média de ciclo</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-primary">0.001mm</div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Tolerância de Circularidade</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-primary">4x</div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Mais vida útil vs. Padrão</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-12">
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] mb-10 text-primary border-b border-primary/20 pb-4">Especificações do Abrasivo</h4>
+                <div className="space-y-6">
+                  {[
+                    { label: "Material da Liga", value: "Cerâmica/Metálica Vitrificada" },
+                    { label: "Granulometria Disponível", value: "#60 até #2500" },
+                    { label: "Dureza de Trabalho", value: "Escala K até T (Padronizada)" },
+                    { label: "Compatibilidade de Máquina", value: "Sunnen, Gehring, Nagel, Inacom" },
+                    { label: "Vida Útil Estimada", value: "850+ ciclos por jogo (Média)" }
+                  ].map((row, i) => (
+                    <div key={i} className="flex justify-between items-center text-sm border-b border-white/5 pb-4">
+                      <span className="text-white/50 font-light">{row.label}</span>
+                      <span className="font-bold uppercase tracking-tight">{row.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Case Studies / Testimonials Section */}
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="text-center mb-16 md:mb-24">
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Cases de Sucesso</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-6">Resultados Reais em Linhas Reais.</h2>
+              <p className="text-on-surface-variant max-w-2xl mx-auto font-light">Não entregamos apenas pedras, entregamos redução de custo operacional e ganho de qualidade final homologado.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {[
+                {
+                  company: "Tier 1 Automotive Supplier",
+                  metric: "32% Redução de Custos",
+                  context: "Brunimento de Bloco de Motor",
+                  result: "Troca de abrasivos importados por liga Microcristal INACOM. Estabilização de rugosidade Ra 0.40 sem variação em lote de 5.000 peças.",
+                  author: "Eng. Ricardo M. - Gerente de Produção"
+                },
+                {
+                  company: "Fabricante de Sistemas Hidráulicos",
+                  metric: "Ra 0.08 Homologado",
+                  context: "Haste de Amortecedor Industrial",
+                  result: "Eliminação de micro-riscos longitudinais que causavam fadiga em retentores. Aumento de 2.5x na vida útil da pedra abrasiva.",
+                  author: "Carlos Alberto S. - Especialista de Processos"
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="bg-surface-container p-8 md:p-12 flex flex-col justify-between border-l-4 border-primary">
+                  <div>
+                    <h5 className="text-2xl font-black text-monolith mb-2">{item.metric}</h5>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-8">{item.company}</p>
+                    <p className="text-on-surface-variant font-light leading-relaxed mb-6">
+                      <span className="font-bold block mb-2 uppercase text-xs tracking-tight text-monolith">Contexto: {item.context}</span>
+                      "{item.result}"
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4 mt-8 pt-8 border-t border-outline-variant/20">
+                    <div className="w-12 h-12 bg-primary flex items-center justify-center text-white font-black text-xl">
+                      {item.author[0]}
+                    </div>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-monolith">{item.author}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* SEO Blog / Insights Section */}
+        <section className="bg-surface py-20 md:py-32 px-4 sm:px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+              <div className="max-w-xl">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Blog Técnico & Insights</span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight">Expertise em <span className="text-primary text-monolith">Brunimento.</span></h2>
+              </div>
+              <button className="text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 border-b-2 border-primary pb-2 hover:text-primary transition-colors">
+                Ver todos os artigos <ChevronRight size={14} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Pedra de brunimento para cilindro: Como escolher a granulometria em SP?",
+                  cat: "Guia Técnico",
+                  date: "12 Abr, 2026"
+                },
+                {
+                  title: "Redução de custo por peça usinada: O impacto da liga vitrificada no brunimento.",
+                  cat: "Gestão Industrial",
+                  date: "08 Abr, 2026"
+                },
+                {
+                  title: "Diferença entre Ra, Rz e Rpk: O guia definitivo para rugosidade em brunimento.",
+                  cat: "Metrologia",
+                  date: "24 Mar, 2026"
+                }
+              ].map((post, idx) => (
+                <div key={idx} className="group cursor-pointer">
+                  <div className="aspect-[16/10] bg-surface-container-high mb-6 ghost-border relative overflow-hidden">
+                    <div className="absolute inset-0 bg-monolith/50 group-hover:bg-monolith/0 transition-all duration-500"></div>
+                    <img 
+                      src={`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800`} 
+                      alt={post.title}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-[8px] font-black px-2 py-1 bg-primary text-white uppercase tracking-widest">{post.cat}</span>
+                    <span className="text-[10px] text-outline font-bold tracking-tight">{post.date}</span>
+                  </div>
+                  <h4 className="text-lg font-black uppercase leading-tight text-monolith group-hover:text-primary transition-colors">{post.title}</h4>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section Improved */}
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12 border-t border-outline-variant/10">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-12 text-center">F.A.Q Técnico</h2>
+            <div className="space-y-6">
+              {[
+                {
+                  q: "As pedras INACOM servem em máquinas Sunnen ou Gehring?",
+                  a: "Sim. Desenvolvemos nossos abrasivos para serem 100% intercambiáveis com os principais cabeçotes de brunimento do mercado, mantendo a geometria original das ferramentas."
+                },
+                {
+                  q: "Qual o prazo de entrega para lotes customizados?",
+                  a: "Como temos fábrica em Indaiatuba-SP, nossos prazos são reduzidos. Lotes padrão em estoque têm entrega imediata; fórmulas customizadas levam entre 10 a 15 dias úteis."
+                },
+                {
+                  q: "Vocês realizam o acompanhamento técnico do Try-Out?",
+                  a: "Sim. Nossos engenheiros de aplicação acompanham o teste in-loco para garantir o ajuste fino de rotação, avanço e pressão, validando a performance prometida."
+                },
+                {
+                  q: "Como garantir a repetitividade da rugosidade Ra entre diferentes lotes?",
+                  a: "Utilizamos ligas padronizadas com controle rigoroso de granulometria e dureza em laboratório próprio. Cada lote é acompanhado de um certificado de conformidade da liga."
+                }
+              ].map((faq, i) => (
+                <div key={i} className="border-b border-outline-variant/20 pb-6 group">
+                  <h4 className="text-sm font-black uppercase text-monolith mb-3 flex items-center justify-between cursor-pointer group-hover:text-primary transition-colors">
+                    {faq.q}
+                    <HelpCircle size={16} className="text-outline-variant group-hover:text-primary" />
+                  </h4>
+                  <p className="text-sm text-on-surface-variant font-light leading-relaxed">
+                    {faq.a}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -586,12 +852,16 @@ export default function App() {
                 <form className="space-y-6 sm:space-y-8" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Nome</label>
+                      <label htmlFor="nome" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Nome</label>
                       <input 
+                        id="nome"
                         name="nome"
                         value={formData.nome}
                         onChange={handleChange}
                         onBlur={() => handleBlur("nome")}
+                        aria-invalid={touched.nome && !!errors.nome}
+                        aria-describedby={touched.nome && errors.nome ? "nome-error" : undefined}
+                        required
                         className={`bg-transparent border-0 border-b ${touched.nome && errors.nome ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm placeholder:text-outline-variant/50 outline-none`}
                         placeholder="Seu nome completo" 
                         type="text" 
@@ -599,12 +869,16 @@ export default function App() {
                       {renderError("nome")}
                     </div>
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Empresa</label>
+                      <label htmlFor="empresa" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Empresa</label>
                       <input 
+                        id="empresa"
                         name="empresa"
                         value={formData.empresa}
                         onChange={handleChange}
                         onBlur={() => handleBlur("empresa")}
+                        aria-invalid={touched.empresa && !!errors.empresa}
+                        aria-describedby={touched.empresa && errors.empresa ? "empresa-error" : undefined}
+                        required
                         className={`bg-transparent border-0 border-b ${touched.empresa && errors.empresa ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
                         placeholder="Nome da organização" 
                         type="text" 
@@ -612,12 +886,16 @@ export default function App() {
                       {renderError("empresa")}
                     </div>
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">WhatsApp</label>
+                      <label htmlFor="whatsapp" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">WhatsApp</label>
                       <input 
+                        id="whatsapp"
                         name="whatsapp"
                         value={formData.whatsapp}
                         onChange={handleChange}
                         onBlur={() => handleBlur("whatsapp")}
+                        aria-invalid={touched.whatsapp && !!errors.whatsapp}
+                        aria-describedby={touched.whatsapp && errors.whatsapp ? "whatsapp-error" : undefined}
+                        required
                         className={`bg-transparent border-0 border-b ${touched.whatsapp && errors.whatsapp ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
                         placeholder="(00) 00000-0000" 
                         type="tel" 
@@ -625,12 +903,16 @@ export default function App() {
                       {renderError("whatsapp")}
                     </div>
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">E-mail Corporativo</label>
+                      <label htmlFor="email" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">E-mail Corporativo</label>
                       <input 
+                        id="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                         onBlur={() => handleBlur("email")}
+                        aria-invalid={touched.email && !!errors.email}
+                        aria-describedby={touched.email && errors.email ? "email-error" : undefined}
+                        required
                         className={`bg-transparent border-0 border-b ${touched.email && errors.email ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
                         placeholder="email@empresa.com.br" 
                         type="email" 
@@ -641,8 +923,9 @@ export default function App() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Material usinado</label>
+                      <label htmlFor="material" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Material usinado</label>
                       <select 
+                        id="material"
                         name="material"
                         value={formData.material}
                         onChange={handleChange}
@@ -661,12 +944,15 @@ export default function App() {
                         animate={{ opacity: 1, height: "auto" }}
                         className="flex flex-col"
                       >
-                        <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Especifique o material</label>
+                        <label htmlFor="outroMaterial" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Especifique o material</label>
                         <input 
+                          id="outroMaterial"
                           name="outroMaterial"
                           value={formData.outroMaterial}
                           onChange={handleChange}
                           onBlur={() => handleBlur("outroMaterial")}
+                          aria-invalid={touched.outroMaterial && !!errors.outroMaterial}
+                          aria-describedby={touched.outroMaterial && errors.outroMaterial ? "outroMaterial-error" : undefined}
                           className={`bg-transparent border-0 border-b ${touched.outroMaterial && errors.outroMaterial ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
                           placeholder="Qual material você usa?" 
                           type="text" 
@@ -676,12 +962,16 @@ export default function App() {
                     )}
 
                     <div className="flex flex-col">
-                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Marca da máquina</label>
+                      <label htmlFor="marcaMaquina" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Marca da máquina</label>
                       <input 
+                        id="marcaMaquina"
                         name="marcaMaquina"
                         value={formData.marcaMaquina}
                         onChange={handleChange}
                         onBlur={() => handleBlur("marcaMaquina")}
+                        aria-invalid={touched.marcaMaquina && !!errors.marcaMaquina}
+                        aria-describedby={touched.marcaMaquina && errors.marcaMaquina ? "marcaMaquina-error" : undefined}
+                        required
                         className={`bg-transparent border-0 border-b ${touched.marcaMaquina && errors.marcaMaquina ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
                         placeholder="Ex: Sunnen, Gehring, Nagel" 
                         type="text" 
@@ -691,12 +981,16 @@ export default function App() {
                   </div>
 
                   <div className="flex flex-col">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Rugosidade Ra/Rz</label>
+                    <label htmlFor="rugosidade" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Rugosidade Ra/Rz</label>
                     <input 
+                      id="rugosidade"
                       name="rugosidade"
                       value={formData.rugosidade}
                       onChange={handleChange}
                       onBlur={() => handleBlur("rugosidade")}
+                      aria-invalid={touched.rugosidade && !!errors.rugosidade}
+                      aria-describedby={touched.rugosidade && errors.rugosidade ? "rugosidade-error" : undefined}
+                      required
                       className={`bg-transparent border-0 border-b ${touched.rugosidade && errors.rugosidade ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
                       placeholder="Especificação técnica do desenho" 
                       type="text" 
@@ -705,8 +999,9 @@ export default function App() {
                   </div>
 
                   <div className="flex flex-col">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Principal desafio</label>
+                    <label htmlFor="desafio" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Principal desafio</label>
                     <select 
+                      id="desafio"
                       name="desafio"
                       value={formData.desafio}
                       onChange={handleChange}
@@ -726,12 +1021,15 @@ export default function App() {
                       animate={{ opacity: 1, height: "auto" }}
                       className="flex flex-col"
                     >
-                      <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Descreva seu desafio</label>
+                      <label htmlFor="outroDesafio" className="text-[10px] font-bold uppercase tracking-[0.2em] text-outline mb-2">Descreva seu desafio</label>
                       <input 
+                        id="outroDesafio"
                         name="outroDesafio"
                         value={formData.outroDesafio}
                         onChange={handleChange}
                         onBlur={() => handleBlur("outroDesafio")}
+                        aria-invalid={touched.outroDesafio && !!errors.outroDesafio}
+                        aria-describedby={touched.outroDesafio && errors.outroDesafio ? "outroDesafio-error" : undefined}
                         className={`bg-transparent border-0 border-b ${touched.outroDesafio && errors.outroDesafio ? 'border-error' : 'border-outline-variant'} focus:ring-0 focus:border-primary transition-all p-2 text-sm outline-none`}
                         placeholder="Digite aqui o desafio técnico da sua linha" 
                         type="text" 
@@ -758,17 +1056,22 @@ export default function App() {
       <footer className="bg-primary text-white w-full px-4 sm:px-6 md:px-12 py-16 md:py-24 flex flex-col gap-16 md:gap-24 font-sans tracking-tight" id="contato">
         <div className="max-w-[1440px] mx-auto w-full flex flex-col md:flex-row justify-between items-start gap-12 sm:gap-16">
           <div className="space-y-6 sm:space-y-8 max-w-sm">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <img 
-                src="https://i.ibb.co/s9z8M4jb/Chat-GPT-Image-16-de-abr-de-2026-16-23-25.png" 
-                alt="INACOM Industrial Precision" 
-                className="h-8 sm:h-10 w-auto object-contain invert brightness-0"
-                referrerPolicy="no-referrer"
-              />
-              <span className="text-2xl sm:text-3xl font-black text-white">INACOM</span>
+            <div className="flex flex-col items-start leading-none">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <img 
+                  src="https://i.ibb.co/s9z8M4jb/Chat-GPT-Image-16-de-abr-de-2026-16-23-25.png" 
+                  alt="INACOM - Precisão que se mede" 
+                  className="h-8 sm:h-10 w-auto object-contain invert brightness-0"
+                  referrerPolicy="no-referrer"
+                />
+                <span className="text-2xl sm:text-3xl font-black text-white">INACOM</span>
+              </div>
+              <span className="text-[8px] sm:text-[10px] font-black tracking-[0.3em] uppercase text-white/50 ml-[44px] sm:ml-[56px] mt-1">
+                Precisão que se mede
+              </span>
             </div>
             <p className="text-outline-variant text-sm font-light normal-case">
-              Performance em Corte Industrial. Especialistas em brunimento e abrasivos de alta precisão com tecnologia alemã aplicada ao mercado brasileiro.
+              Performance em Corte Industrial. Especialistas em brunimento e abrasivos de alta precisão com tecnologia aplicada ao mercado brasileiro.
             </p>
             <div className="flex flex-col gap-4 text-[10px] sm:text-xs tracking-widest uppercase">
               <span className="flex items-center gap-3"><Phone size={14} className="text-outline-variant" /> +55 (19) 3935 4487</span>
@@ -838,6 +1141,7 @@ export default function App() {
         <button 
           onClick={scrollToForm}
           className="bg-primary text-white px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-primary-container"
+          aria-label="Solicitar Orçamento de Kit Try-Out"
         >
           Solicitar
         </button>
@@ -850,8 +1154,9 @@ export default function App() {
           whileTap={{ scale: 0.95 }}
           onClick={scrollToForm}
           className="bg-primary text-white p-6 md:p-8 shadow-2xl flex flex-col items-center gap-2 group border border-white/20"
+          aria-label="Solicitar Orçamento de Kit Try-Out"
         >
-          <Zap size={24} className="group-hover:animate-pulse" />
+          <Zap size={24} className="group-hover:animate-pulse" aria-hidden="true" />
           <span className="text-[9px] font-black uppercase tracking-[0.3em] vertical-text">Try-Out</span>
         </motion.button>
       </div>

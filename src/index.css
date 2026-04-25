@@ -34,7 +34,7 @@
   --color-error-container: #ffdad6;
   --color-on-tertiary-fixed-variant: #e1e2e6;
   --color-on-secondary-container: #1a1c1d;
-  --color-outline: #777777;
+  --color-outline: #666666;
   --color-surface-container: #edeeef;
   --color-on-tertiary-fixed: #ffffff;
   --color-primary: #000000;
@@ -43,14 +43,20 @@
   --color-primary-container: #3b3b3b;
   --color-surface-container-high: #e7e8e9;
   --color-tertiary-fixed: #5c5f62;
-  --color-on-surface-variant: #474747;
-  --color-outline-variant: #c6c6c6;
+  --color-on-surface-variant: #404040;
+  --color-outline-variant: #b0b0b0;
   --color-on-tertiary: #e1e2e6;
   --color-secondary: #5e5e60;
   --color-tertiary-container: #727578;
   --color-surface-container-highest: #e1e3e4;
   --color-surface-tint: #5e5e5e;
   --color-primary-fixed: #5e5e5e;
+}
+
+@layer base {
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
 }
 
 @layer utilities {
