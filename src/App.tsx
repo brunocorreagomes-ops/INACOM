@@ -584,12 +584,12 @@ export default function App() {
         </section>
 
         {/* Application Sectors Section */}
-        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12 border-b border-outline-variant/10">
+        <section className="bg-monolith py-20 md:py-32 px-4 sm:px-6 md:px-12 text-white border-b border-white/5">
           <div className="max-w-[1440px] mx-auto">
             <div className="mb-16 md:mb-24">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Setores de Atuação</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary block mb-4">Setores de Atuação</span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight">
-                Onde a Precisão é <span className="text-primary text-monolith">Indispensável.</span>
+                Onde a Precisão é <span className="text-white/40 text-monolith">Indispensável.</span>
               </h2>
             </div>
             
@@ -614,13 +614,13 @@ export default function App() {
                   icon: <Zap size={24} />
                 }
               ].map((item, idx) => (
-                <div key={idx} className="p-8 md:p-10 bg-surface-container ghost-border group hover:bg-primary transition-all duration-500">
-                  <div className="mb-8 p-4 bg-white inline-block group-hover:text-primary transition-colors">
+                <div key={idx} className="p-8 md:p-10 bg-white/5 border border-white/10 group hover:bg-primary transition-all duration-500">
+                  <div className="mb-8 p-4 bg-white/10 inline-block group-hover:bg-white group-hover:text-primary transition-colors">
                     {item.icon}
                   </div>
                   <h4 className="text-xl font-black uppercase mb-4 text-monolith group-hover:text-white transition-colors">{item.sector}</h4>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-primary group-hover:text-white/80 mb-6">{item.task}</p>
-                  <p className="text-on-surface-variant font-light text-sm leading-relaxed group-hover:text-white/90 transition-colors">
+                  <p className="text-white/60 font-light text-sm leading-relaxed group-hover:text-white/90 transition-colors">
                     {item.desc}
                   </p>
                 </div>
@@ -630,35 +630,35 @@ export default function App() {
         </section>
 
         {/* Provas Técnicas e Métricas Section */}
-        <section className="bg-monolith py-20 md:py-32 px-4 sm:px-6 md:px-12 text-white overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 translate-x-1/2"></div>
+        <section className="bg-surface py-20 md:py-32 px-4 sm:px-6 md:px-12 border-b border-outline-variant/10 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-surface-container-high -skew-x-12 translate-x-1/2"></div>
           <div className="max-w-[1440px] mx-auto relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary block mb-4">Métricas de Performance</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Métricas de Performance</span>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight mb-8">
-                  Dados que validam a nossa <span className="text-white/40">Engenharia.</span>
+                  Dados que validam a nossa <span className="text-primary text-monolith">Engenharia.</span>
                 </h2>
                 <div className="grid grid-cols-2 gap-6 sm:gap-8">
                   <div className="space-y-2">
                     <div className="text-4xl sm:text-5xl font-black text-primary">0.02μm</div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Rugosidade Ra Mínima</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Rugosidade Ra Mínima</p>
                   </div>
                   <div className="space-y-2">
                     <div className="text-4xl sm:text-5xl font-black text-primary">35%</div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Redução média de ciclo</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Redução média de ciclo</p>
                   </div>
                   <div className="space-y-2">
                     <div className="text-4xl sm:text-5xl font-black text-primary">0.001mm</div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Tolerância de Circularidade</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Tolerância de Circularidade</p>
                   </div>
                   <div className="space-y-2">
                     <div className="text-4xl sm:text-5xl font-black text-primary">4x</div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/60">Mais vida útil vs. Padrão</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Mais vida útil vs. Padrão</p>
                   </div>
                 </div>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-12">
+              <div className="bg-white p-8 md:p-12 ghost-border shadow-xl">
                 <h4 className="text-xs font-black uppercase tracking-[0.2em] mb-10 text-primary border-b border-primary/20 pb-4">Especificações do Abrasivo</h4>
                 <div className="space-y-6">
                   {[
@@ -668,9 +668,9 @@ export default function App() {
                     { label: "Compatibilidade de Máquina", value: "Sunnen, Gehring, Nagel, Inacom" },
                     { label: "Vida Útil Estimada", value: "850+ ciclos por jogo (Média)" }
                   ].map((row, i) => (
-                    <div key={i} className="flex justify-between items-center text-sm border-b border-white/5 pb-4">
-                      <span className="text-white/50 font-light">{row.label}</span>
-                      <span className="font-bold uppercase tracking-tight">{row.value}</span>
+                    <div key={i} className="flex justify-between items-center text-sm border-b border-outline-variant/10 pb-4">
+                      <span className="text-on-surface-variant font-light">{row.label}</span>
+                      <span className="font-bold uppercase tracking-tight text-monolith">{row.value}</span>
                     </div>
                   ))}
                 </div>
@@ -680,12 +680,12 @@ export default function App() {
         </section>
 
         {/* Case Studies / Testimonials Section */}
-        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
+        <section className="bg-monolith py-20 md:py-32 px-4 sm:px-6 md:px-12 text-white">
           <div className="max-w-[1440px] mx-auto">
             <div className="text-center mb-16 md:mb-24">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Cases de Sucesso</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary block mb-4">Cases de Sucesso</span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-6">Resultados Reais em Linhas Reais.</h2>
-              <p className="text-on-surface-variant max-w-2xl mx-auto font-light">Não entregamos apenas pedras, entregamos redução de custo operacional e ganho de qualidade final homologado.</p>
+              <p className="text-white/60 max-w-2xl mx-auto font-light">Não entregamos apenas pedras, entregamos redução de custo operacional e ganho de qualidade final homologado.</p>
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -705,20 +705,20 @@ export default function App() {
                   author: "Carlos Alberto S. - Especialista de Processos"
                 }
               ].map((item, idx) => (
-                <div key={idx} className="bg-surface-container p-8 md:p-12 flex flex-col justify-between border-l-4 border-primary">
+                <div key={idx} className="bg-white/5 p-8 md:p-12 flex flex-col justify-between border-l-4 border-primary hover:bg-white/[0.08] transition-colors">
                   <div>
-                    <h5 className="text-2xl font-black text-monolith mb-2">{item.metric}</h5>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-8">{item.company}</p>
-                    <p className="text-on-surface-variant font-light leading-relaxed mb-6">
-                      <span className="font-bold block mb-2 uppercase text-xs tracking-tight text-monolith">Contexto: {item.context}</span>
+                    <h5 className="text-2xl font-black text-monolith mb-2 text-primary">{item.metric}</h5>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-8">{item.company}</p>
+                    <p className="text-white/80 font-light leading-relaxed mb-6">
+                      <span className="font-bold block mb-2 uppercase text-xs tracking-tight text-primary">Contexto: {item.context}</span>
                       "{item.result}"
                     </p>
                   </div>
-                  <div className="flex items-center gap-4 mt-8 pt-8 border-t border-outline-variant/20">
+                  <div className="flex items-center gap-4 mt-8 pt-8 border-t border-white/10">
                     <div className="w-12 h-12 bg-primary flex items-center justify-center text-white font-black text-xl">
                       {item.author[0]}
                     </div>
-                    <span className="text-[11px] font-black uppercase tracking-widest text-monolith">{item.author}</span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-white/80">{item.author}</span>
                   </div>
                 </div>
               ))}
@@ -727,7 +727,7 @@ export default function App() {
         </section>
 
         {/* SEO Blog / Insights Section */}
-        <section className="bg-surface py-20 md:py-32 px-4 sm:px-6 md:px-12">
+        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12">
           <div className="max-w-[1440px] mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
               <div className="max-w-xl">
@@ -759,7 +759,7 @@ export default function App() {
               ].map((post, idx) => (
                 <div key={idx} className="group cursor-pointer">
                   <div className="aspect-[16/10] bg-surface-container-high mb-6 ghost-border relative overflow-hidden">
-                    <div className="absolute inset-0 bg-monolith/50 group-hover:bg-monolith/0 transition-all duration-500"></div>
+                    <div className="absolute inset-0 bg-monolith/40 group-hover:bg-monolith/0 transition-all duration-500"></div>
                     <img 
                       src={`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800`} 
                       alt={post.title}
@@ -779,7 +779,7 @@ export default function App() {
         </section>
 
         {/* FAQ Section Improved */}
-        <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12 border-t border-outline-variant/10">
+        <section className="bg-surface py-20 md:py-32 px-4 sm:px-6 md:px-12 border-t border-outline-variant/10">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-12 text-center">F.A.Q Técnico</h2>
             <div className="space-y-6">
