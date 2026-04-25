@@ -315,7 +315,7 @@ export default function App() {
               transition={{ duration: 0.8 }}
               className="max-w-3xl"
             >
-              <h1 className="text-white text-3xl sm:text-5xl md:text-7xl font-black leading-[1] md:leading-[0.9] text-monolith mb-6 md:mb-8 uppercase">
+              <h1 className="text-white text-3xl sm:text-5xl md:text-7xl font-black leading-[1] md:leading-[0.9] tracking-monolith mb-6 md:mb-8 uppercase">
                 Domínio Absoluto em Brunimento Industrial
               </h1>
               <p className="text-on-primary text-sm sm:text-base md:text-xl font-light mb-8 md:mb-12 max-w-xl border-l-2 border-primary-fixed-dim pl-6 md:pl-8 leading-relaxed">
@@ -383,7 +383,7 @@ export default function App() {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith mb-8 leading-tight">
                 Qualidade excepcional e inovação constante.
               </h2>
               <div className="space-y-6 text-on-surface-variant font-light leading-relaxed text-base md:text-lg">
@@ -416,7 +416,7 @@ export default function App() {
           <div className="max-w-[1440px] mx-auto">
             <div className="mb-20 md:mb-32">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Engenharia de Materiais</span>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase text-monolith leading-tight mb-12">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-monolith leading-tight mb-12">
                 Quais materiais usamos?
               </h2>
               
@@ -487,7 +487,7 @@ export default function App() {
               className="mb-16 md:mb-24"
             >
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Protocolo Operacional</span>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase text-monolith leading-tight md:leading-none">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-monolith leading-tight md:leading-none">
                 Homologue sem Risco.<br />
                 <span className="text-primary">Nosso processo em 3 passos.</span>
               </h2>
@@ -546,7 +546,7 @@ export default function App() {
               viewport={{ once: true }}
               className="text-center mb-12 md:mb-16"
             >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-4">Nossa Linha</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith mb-4">Nossa Linha</h2>
               <div className="h-1 w-24 bg-primary mx-auto"></div>
             </motion.div>
             
@@ -588,8 +588,8 @@ export default function App() {
           <div className="max-w-[1440px] mx-auto">
             <div className="mb-16 md:mb-24">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary block mb-4">Setores de Atuação</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight">
-                Onde a Precisão é <span className="text-white/40 text-monolith">Indispensável.</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith leading-tight">
+                Onde a Precisão é <span className="text-white/40 tracking-monolith">Indispensável.</span>
               </h2>
             </div>
             
@@ -618,7 +618,7 @@ export default function App() {
                   <div className="mb-8 p-4 bg-white/10 inline-block group-hover:bg-white group-hover:text-primary transition-colors">
                     {item.icon}
                   </div>
-                  <h4 className="text-xl font-black uppercase mb-4 text-monolith group-hover:text-white transition-colors">{item.sector}</h4>
+                  <h4 className="text-xl font-black uppercase mb-4 tracking-monolith group-hover:text-white transition-colors">{item.sector}</h4>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-primary group-hover:text-white/80 mb-6">{item.task}</p>
                   <p className="text-white/60 font-light text-sm leading-relaxed group-hover:text-white/90 transition-colors">
                     {item.desc}
@@ -636,8 +636,8 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Métricas de Performance</span>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight mb-8">
-                  Dados que validam a nossa <span className="text-primary text-monolith">Engenharia.</span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith leading-tight mb-8">
+                  Dados que validam a nossa <span className="text-primary tracking-monolith">Engenharia.</span>
                 </h2>
                 <div className="grid grid-cols-2 gap-6 sm:gap-8">
                   <div className="space-y-2">
@@ -670,7 +670,7 @@ export default function App() {
                   ].map((row, i) => (
                     <div key={i} className="flex justify-between items-center text-sm border-b border-outline-variant/10 pb-4">
                       <span className="text-on-surface-variant font-light">{row.label}</span>
-                      <span className="font-bold uppercase tracking-tight text-monolith">{row.value}</span>
+                      <span className="font-bold uppercase tracking-tight text-primary">{row.value}</span>
                     </div>
                   ))}
                 </div>
@@ -684,7 +684,7 @@ export default function App() {
           <div className="max-w-[1440px] mx-auto">
             <div className="text-center mb-16 md:mb-24">
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary block mb-4">Cases de Sucesso</span>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-6">Resultados Reais em Linhas Reais.</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith mb-6">Resultados Reais em Linhas Reais.</h2>
               <p className="text-white/60 max-w-2xl mx-auto font-light">Não entregamos apenas pedras, entregamos redução de custo operacional e ganho de qualidade final homologado.</p>
             </div>
             
@@ -732,7 +732,7 @@ export default function App() {
             <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
               <div className="max-w-xl">
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/40 block mb-4">Blog Técnico & Insights</span>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith leading-tight">Expertise em <span className="text-primary text-monolith">Brunimento.</span></h2>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith leading-tight">Expertise em <span className="text-primary tracking-monolith">Brunimento.</span></h2>
               </div>
               <button className="text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 border-b-2 border-primary pb-2 hover:text-primary transition-colors">
                 Ver todos os artigos <ChevronRight size={14} />
@@ -771,7 +771,7 @@ export default function App() {
                     <span className="text-[8px] font-black px-2 py-1 bg-primary text-white uppercase tracking-widest">{post.cat}</span>
                     <span className="text-[10px] text-outline font-bold tracking-tight">{post.date}</span>
                   </div>
-                  <h4 className="text-lg font-black uppercase leading-tight text-monolith group-hover:text-primary transition-colors">{post.title}</h4>
+                  <h4 className="text-lg font-black uppercase leading-tight tracking-monolith group-hover:text-primary transition-colors">{post.title}</h4>
                 </div>
               ))}
             </div>
@@ -781,7 +781,7 @@ export default function App() {
         {/* FAQ Section Improved */}
         <section className="bg-surface py-20 md:py-32 px-4 sm:px-6 md:px-12 border-t border-outline-variant/10">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-12 text-center">F.A.Q Técnico</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith mb-12 text-center">F.A.Q Técnico</h2>
             <div className="space-y-6">
               {[
                 {
@@ -802,7 +802,7 @@ export default function App() {
                 }
               ].map((faq, i) => (
                 <div key={i} className="border-b border-outline-variant/20 pb-6 group">
-                  <h4 className="text-sm font-black uppercase text-monolith mb-3 flex items-center justify-between cursor-pointer group-hover:text-primary transition-colors">
+                  <h4 className="text-sm font-black uppercase tracking-monolith mb-3 flex items-center justify-between cursor-pointer group-hover:text-primary transition-colors">
                     {faq.q}
                     <HelpCircle size={16} className="text-outline-variant group-hover:text-primary" />
                   </h4>
@@ -819,7 +819,7 @@ export default function App() {
         <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12" id="pedido-orcamento">
           <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
             <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase text-monolith mb-8 md:mb-12">Solicite orçamento personalizado para seu projeto.</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-monolith mb-8 md:mb-12">Solicite orçamento personalizado para seu projeto.</h2>
               <p className="text-on-surface-variant mb-8 md:mb-12 text-base sm:text-lg font-light leading-relaxed">
                 Nosso compromisso é com você, atendimento 100% personalizado para garantir a solução exata para sua linha de produção industrial.
               </p>

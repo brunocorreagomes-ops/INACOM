@@ -51,6 +51,7 @@
   --color-surface-container-highest: #e1e3e4;
   --color-surface-tint: #5e5e5e;
   --color-primary-fixed: #5e5e5e;
+  --color-monolith: #0b0c0d;
 }
 
 @layer base {
@@ -60,7 +61,7 @@
 }
 
 @layer utilities {
-  .text-monolith {
+  .tracking-monolith {
     letter-spacing: -0.02em;
   }
   
