@@ -157,25 +157,39 @@ export default function App() {
 
   useEffect(() => {
     let interval: any;
+    let attempts = 0;
     const initPlayer = () => {
-      if ((window as any).YT && (window as any).YT.Player) {
-        new (window as any).YT.Player('youtube-player', {
-          videoId: 'uESr_l5TUfg',
-          playerVars: {
-            autoplay: 0,
-            mute: 1,
-            controls: 1,
-            rel: 0,
-            modestbranding: 1,
-            enablejsapi: 1
-          },
-          events: {
-            'onReady': (event: any) => {
-              setPlayer(event.target);
-            }
-          }
-        });
+      attempts++;
+      if (attempts > 50) {
         clearInterval(interval);
+        return;
+      }
+      if ((window as any).YT && (window as any).YT.Player) {
+        try {
+          const playerEl = document.getElementById('youtube-player');
+          if (playerEl) {
+            new (window as any).YT.Player('youtube-player', {
+              videoId: 'uESr_l5TUfg',
+              playerVars: {
+                autoplay: 0,
+                mute: 1,
+                controls: 1,
+                rel: 0,
+                modestbranding: 1,
+                enablejsapi: 1
+              },
+              events: {
+                'onReady': (event: any) => {
+                  setPlayer(event.target);
+                }
+              }
+            });
+            clearInterval(interval);
+          }
+        } catch (e) {
+          console.error("YouTube Player init error:", e);
+          clearInterval(interval);
+        }
       }
     };
 
