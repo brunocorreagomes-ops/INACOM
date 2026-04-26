@@ -4,7 +4,6 @@ import { FileText, Download, CheckCircle2, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ProductProps {
-// ... (omitted for brevity in thinking, but will provide full block)
   name: string;
   desc: string;
   material: string;

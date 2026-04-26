@@ -3,7 +3,6 @@ import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface BlogPost {
-// ...
   slug: string;
   title: string;
   category: string;
