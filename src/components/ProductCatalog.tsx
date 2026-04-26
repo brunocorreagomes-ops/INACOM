@@ -151,7 +151,9 @@ export function ProductCatalog() {
   };
 
   return (
-    <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12 border-t border-outline-variant/10" id="produtos">
+    <section className="bg-white py-20 md:py-32 px-4 sm:px-6 md:px-12 border-t border-outline-variant/10" id="produtos" itemScope itemType="https://schema.org/ItemList">
+      <link itemProp="url" href={window.location.origin + "#produtos"} />
+      <h2 className="sr-only" itemProp="name">Catálogo de Produtos de Brunimento INACOM</h2>
       <div className="max-w-[1440px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-16 md:mb-24">
           <div className="max-w-2xl">
@@ -226,6 +228,7 @@ export function ProductCatalog() {
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="relative group/mini-share">
                       <button 
+                        aria-label={`Compartilhar ${product.name}`}
                         onClick={(e) => {
                           e.stopPropagation();
                         }}

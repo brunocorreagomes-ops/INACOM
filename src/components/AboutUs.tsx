@@ -3,7 +3,7 @@ import { Award, ShieldCheck, History, Target } from "lucide-react";
 
 export function AboutUs() {
   return (
-    <section className="bg-monolith py-24 md:py-32 px-4 sm:px-6 md:px-12 relative overflow-hidden" id="sobre">
+    <section className="bg-monolith py-24 md:py-32 px-4 sm:px-6 md:px-12 relative overflow-hidden" id="sobre" itemScope itemType="https://schema.org/AboutPage">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div className="grid grid-cols-12 h-full">
