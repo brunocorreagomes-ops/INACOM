@@ -25,6 +25,8 @@ import {
   ArrowUp,
   FileText
 } from "lucide-react";
+import { ProductCatalog } from "./components/ProductCatalog";
+import { AboutUs } from "./components/AboutUs";
 import { useState, useMemo, ChangeEvent, FormEvent, useEffect, useRef } from "react";
 
 interface FormData {
@@ -254,6 +256,8 @@ export default function App() {
           
           <div className="hidden lg:flex items-center gap-8 xl:gap-12" role="list">
             <a className="text-primary font-bold border-b-2 border-primary pb-1 transition-all" href="#inicio" aria-current="page">Início</a>
+            <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#sobre">Empresa</a>
+            <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#produtos">Produtos</a>
             <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#protocolo">Protocolo de Homologação</a>
             <a className="text-outline hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#contato">Contato</a>
           </div>
@@ -286,6 +290,8 @@ export default function App() {
               className="lg:hidden bg-background border-b border-outline-variant/10 px-6 py-8 flex flex-col gap-6 overflow-hidden"
             >
               <a className="text-xl font-bold" href="#inicio" onClick={() => setIsMenuOpen(false)}>Início</a>
+              <a className="text-xl font-bold text-outline" href="#sobre" onClick={() => setIsMenuOpen(false)}>Empresa</a>
+              <a className="text-xl font-bold text-outline" href="#produtos" onClick={() => setIsMenuOpen(false)}>Produtos</a>
               <a className="text-xl font-bold text-outline" href="#protocolo" onClick={() => setIsMenuOpen(false)}>Protocolo de Homologação</a>
               <a className="text-xl font-bold text-outline" href="#contato" onClick={() => setIsMenuOpen(false)}>Contato</a>
               <button className="sm:hidden bg-primary text-white w-full py-4 font-bold uppercase tracking-widest mt-4">
@@ -476,6 +482,9 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        <AboutUs />
+        <ProductCatalog />
 
         {/* Homologation Protocol Section */}
         <section className="bg-surface-container-high py-20 md:py-32 px-4 sm:px-6 md:px-12 overflow-hidden" id="protocolo">
