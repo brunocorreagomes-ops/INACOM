@@ -144,6 +144,7 @@ export default function App() {
 
             {/* Blog */}
             <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPage />} />
             
             {/* Glossário */}
             <Route path="/glossario-brunimento" element={<HomePage />} /> {/* Placeholder since it's a section on home */}

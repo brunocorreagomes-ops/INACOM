@@ -1,8 +1,10 @@
 import { motion } from "motion/react";
 import { SeoHead } from "../components/SeoHead";
 import { FileText, Download, CheckCircle2, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface ProductProps {
+// ... (omitted for brevity in thinking, but will provide full block)
   name: string;
   desc: string;
   material: string;
@@ -66,9 +68,9 @@ export function ProductPage({ name, desc, material, granulometria, ra, dureza, i
             </div>
 
             <div className="flex flex-wrap gap-4">
-               <button className="bg-primary text-white px-10 py-5 font-bold uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center gap-3">
+               <Link to="/#pedido-orcamento" className="bg-primary text-white px-10 py-5 font-bold uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center gap-3">
                  Solicitar Orçamento <ChevronRight size={16} />
-               </button>
+               </Link>
                <button className="border border-outline-variant text-[10px] font-bold px-10 py-5 uppercase tracking-widest hover:bg-surface transition-colors flex items-center gap-3">
                  Baixar TDS <FileText size={16} />
                </button>

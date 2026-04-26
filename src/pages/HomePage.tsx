@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
+import { Link } from "react-router-dom";
 import { 
   ChevronRight, 
   CheckCircle2, 
@@ -205,10 +206,10 @@ export function HomePage() {
               <p className="text-on-primary text-sm sm:text-base md:text-xl font-light mb-8 md:mb-12 max-w-xl border-l-2 border-primary pl-10 leading-relaxed" itemProp="description">
                 Abrasivos de alta precisão para estabilidade de processo, alcance exato de rugosidade e redução de custo por peça.
               </p>
-              <a href="#pedido-orcamento" className="btn-machined text-white px-10 py-6 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] inline-flex items-center gap-4 group">
+              <Link to="/#pedido-orcamento" className="btn-machined text-white px-10 py-6 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] inline-flex items-center gap-4 group">
                 Solicitar Kit Try-Out
                 <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
             </motion.div>
           </div>
         </section>

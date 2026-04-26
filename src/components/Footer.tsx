@@ -1,4 +1,5 @@
 import { Mail, Phone, MapPin, Instagram, Linkedin, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
@@ -22,10 +23,10 @@ export function Footer() {
         <div>
           <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-8 text-outline">Soluções</h4>
           <ul className="space-y-4 text-xs font-bold uppercase tracking-widest text-white/60">
-            <li><a href="/brunimento-automotivo" className="hover:text-white transition-colors">Setor Automotivo</a></li>
-            <li><a href="/brunimento-hidraulico" className="hover:text-white transition-colors">Setor Hidráulico</a></li>
-            <li><a href="/brunimento-pneumatico" className="hover:text-white transition-colors">Setor Pneumático</a></li>
-            <li><a href="/glossario-brunimento" className="hover:text-white transition-colors">Glossário Técnico</a></li>
+            <li><Link to="/brunimento-automotivo" className="hover:text-white transition-colors">Setor Automotivo</Link></li>
+            <li><Link to="/brunimento-hidraulico" className="hover:text-white transition-colors">Setor Hidráulico</Link></li>
+            <li><Link to="/brunimento-pneumatico" className="hover:text-white transition-colors">Setor Pneumático</Link></li>
+            <li><Link to="/glossario-brunimento" className="hover:text-white transition-colors">Glossário Técnico</Link></li>
           </ul>
         </div>
 
@@ -55,7 +56,7 @@ export function Footer() {
           © 2026 INACOM INDÚSTRIA DE ABRASIVOS. TODOS OS DIREITOS RESERVADOS.
         </p>
         <p className="text-[10px] font-bold uppercase tracking-widest text-white/20">
-          Desenvolvido por <a href="https://orvalia.com" className="text-white/40 hover:text-primary transition-colors">ORVALIA.</a>
+          Desenvolvido por <a href="https://orvalia.com" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-primary transition-colors">ORVALIA.</a>
         </p>
       </div>
 

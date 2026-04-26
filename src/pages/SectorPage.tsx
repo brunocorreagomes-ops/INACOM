@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { ChevronRight } from "lucide-react";
 import { SeoHead } from "../components/SeoHead";
+import { Link } from "react-router-dom";
 
 export function SectorPage({ title, sector, focus, h1, schemaProduct }: { title: string, sector: string, focus: string, h1: string, schemaProduct: string }) {
   return (
@@ -27,9 +28,9 @@ export function SectorPage({ title, sector, focus, h1, schemaProduct }: { title:
             A INACOM desenvolve abrasivos sob medida para os desafios críticos do setor {sector.toLowerCase()}, focando em {focus.toLowerCase()}.
           </p>
           <div className="mt-12">
-            <a href="#contato" className="bg-primary text-white px-8 py-4 font-bold uppercase tracking-widest hover:bg-primary-container transition-colors inline-block">
+            <Link to="/#pedido-orcamento" className="bg-primary text-white px-8 py-4 font-bold uppercase tracking-widest hover:bg-primary-container transition-colors inline-block">
               Solicitar Try-Out Orientado
-            </a>
+            </Link>
           </div>
         </div>
       </header>
@@ -123,9 +124,9 @@ export function SectorPage({ title, sector, focus, h1, schemaProduct }: { title:
 
       <div className="bg-monolith py-20 text-center">
         <h3 className="text-white text-2xl font-black uppercase mb-8">Precisa de um Try-Out para este setor?</h3>
-        <a href="#contato" className="border-2 border-primary text-primary px-10 py-4 font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-all">
+        <Link to="/#pedido-orcamento" className="border-2 border-primary text-primary px-10 py-4 font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-all">
           Agendar Consultoria Técnica
-        </a>
+        </Link>
       </div>
     </div>
   );

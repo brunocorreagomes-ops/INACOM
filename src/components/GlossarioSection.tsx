@@ -103,7 +103,7 @@ export function GlossarioSection() {
                   {item.relacionados.map((rel) => (
                     <a 
                       key={rel}
-                      href={`#${rel.toLowerCase().replace(/\s/g, '-')}`}
+                      href={`/#${rel.toLowerCase().replace(/\s/g, '-')}`}
                       className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 bg-surface-container text-outline hover:bg-primary hover:text-white transition-colors"
                     >
                       {rel}

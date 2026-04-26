@@ -16,6 +16,7 @@ import {
   MessageCircle
 } from "lucide-react";
 import { useState, useMemo, useRef } from "react";
+import { Link } from "react-router-dom";
 
 interface TechnicalSpec {
   label: string;
@@ -24,6 +25,7 @@ interface TechnicalSpec {
 
 interface Product {
   id: string;
+  slug?: string;
   name: string;
   category: string;
   description: string;
@@ -37,11 +39,12 @@ interface Product {
 const products: Product[] = [
   {
     id: "pedra-vitrificada",
+    slug: "pedra-microcristalina",
     name: "Pedras de Brunimento Vitrificadas",
     category: "Abrasivos Convencionais",
     description: "Ideal para brunimento de acabamento em aços e ferros fundidos.",
     longDescription: "Nossas pedras vitrificadas são formuladas com ligas de alta performance que garantem uma remoção de material consistente e uma rugosidade controlada. O processo de sinterização a altas temperaturas cria uma estrutura porosa que facilita a refrigeração e evita o empastamento.",
-    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
     specs: [
       { label: "Ligante", value: "Cerâmico Vitrificado" },
       { label: "Granulometria", value: "#60 - #1200" },
@@ -58,6 +61,7 @@ const products: Product[] = [
   },
   {
     id: "superabrasivo-cbn",
+    slug: "carboneto-silicio-verde",
     name: "Réguas Superabrasivas CBN",
     category: "Superabrasivos",
     description: "Máxima durabilidade para brunimento de aços endurecidos.",
@@ -79,6 +83,7 @@ const products: Product[] = [
   },
   {
     id: "superabrasivo-diamante",
+    slug: "oxido-aluminio",
     name: "Réguas de Diamante",
     category: "Superabrasivos",
     description: "Excelente para brunimento de ferro fundido e materiais não-ferrosos.",
@@ -100,6 +105,7 @@ const products: Product[] = [
   },
   {
     id: "bastao-acabamento",
+    slug: "carboneto-silicio-preto",
     name: "Bastões de Acabamento (Honing Stones)",
     category: "Acessórios",
     description: "Ajuste fino manual ou semi-automático para pequenos reparos.",
@@ -313,17 +319,26 @@ export function ProductCatalog() {
                       {selectedProduct.description}
                     </p>
                       <div className="flex flex-wrap gap-4 relative">
-                        <a 
-                          href={selectedProduct.tdsLink} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="bg-primary text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center gap-2"
-                        >
-                          Ficha Técnica <FileText size={14} />
-                        </a>
-                        <button className="border border-outline-variant text-monolith px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
-                          Solicitar Amostra
-                        </button>
+                        {selectedProduct.slug ? (
+                          <Link 
+                            to={`/${selectedProduct.slug}`}
+                            className="bg-primary text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center gap-2"
+                          >
+                            Ver Detalhes <ChevronRight size={14} />
+                          </Link>
+                        ) : (
+                          <a 
+                            href={selectedProduct.tdsLink} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="bg-primary text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center gap-2"
+                          >
+                            Ficha Técnica <FileText size={14} />
+                          </a>
+                        )}
+                        <Link to="/#pedido-orcamento" className="border border-outline-variant text-monolith px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
+                          Solicitar Orçamento
+                        </Link>
                         
                         <div className="relative group/share">
                           <button 
@@ -336,7 +351,7 @@ export function ProductCatalog() {
                             <div className="p-2 flex flex-col">
                               <button 
                                 onClick={() => {
-                                  const text = `Confira ${selectedProduct.name} da INACOM: ${window.location.href}`;
+                                  const text = `Confira ${selectedProduct.name} da INACOM: ${window.location.host}/${selectedProduct.slug || ""}`;
                                   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
                                 }}
                                 className="flex items-center gap-3 p-3 text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary hover:bg-surface-container transition-colors text-left"
@@ -346,7 +361,7 @@ export function ProductCatalog() {
                               <button 
                                 onClick={() => {
                                   const subject = encodeURIComponent(`Produto INACOM: ${selectedProduct.name}`);
-                                  const body = encodeURIComponent(`Olá,\n\nConfira este produto da INACOM: ${selectedProduct.name}\n\nLink: ${window.location.href}`);
+                                  const body = encodeURIComponent(`Olá,\n\nConfira este produto da INACOM: ${selectedProduct.name}\n\nLink: ${window.location.host}/${selectedProduct.slug || ""}`);
                                   window.location.href = `mailto:?subject=${subject}&body=${body}`;
                                 }}
                                 className="flex items-center gap-3 p-3 text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary hover:bg-surface-container transition-colors text-left"
@@ -355,7 +370,7 @@ export function ProductCatalog() {
                               </button>
                               <button 
                                 onClick={() => {
-                                  navigator.clipboard.writeText(window.location.href);
+                                  navigator.clipboard.writeText(`${window.location.host}/${selectedProduct.slug || ""}`);
                                   setCopiedId(selectedProduct.id);
                                   setTimeout(() => setCopiedId(null), 2000);
                                 }}

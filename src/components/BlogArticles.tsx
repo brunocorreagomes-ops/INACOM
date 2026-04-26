@@ -1,7 +1,9 @@
 import { motion } from "motion/react";
 import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface BlogPost {
+// ...
   slug: string;
   title: string;
   category: string;
@@ -91,9 +93,10 @@ export function BlogArticles() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {posts.map((post) => (
-            <article 
+            <Link 
+              to={`/blog/${post.slug}`}
               key={post.slug}
-              className="group cursor-pointer"
+              className="group cursor-pointer block"
               itemScope 
               itemType="https://schema.org/Article"
             >
@@ -124,7 +127,7 @@ export function BlogArticles() {
                   {post.category}
                 </span>
                 <time 
-                  className="text-[10px] text-outline font-bold tracking-tight"
+                   className="text-[10px] text-outline font-bold tracking-tight"
                   dateTime={post.date}
                   itemProp="datePublished"
                 >
@@ -141,7 +144,7 @@ export function BlogArticles() {
               <p className="text-sm font-light text-on-surface-variant mt-4 line-clamp-2" itemProp="abstract">
                 {post.excerpt}
               </p>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
