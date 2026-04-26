@@ -9,7 +9,11 @@ import {
   CheckCircle2, 
   Download,
   Info,
-  ArrowUpDown
+  ArrowUpDown,
+  Share2,
+  Mail,
+  Copy,
+  MessageCircle
 } from "lucide-react";
 import { useState, useMemo, useRef } from "react";
 
@@ -123,6 +127,7 @@ export function ProductCatalog() {
   const [selectedProduct, setSelectedProduct] = useState<Product>(products[0]);
   const [activeTab, setActiveTab] = useState<"specs" | "applications" | "guide">("specs");
   const [sortOrder, setSortOrder] = useState<SortOrder>("name-asc");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
 
   const sortedProducts = useMemo(() => {
@@ -181,14 +186,21 @@ export function ProductCatalog() {
             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-outline mb-6 border-b border-outline-variant/20 pb-2">Selecione o Produto</h3>
             <div className="flex flex-col gap-1">
               {sortedProducts.map((product) => (
-                <motion.button
+                <motion.div
                   key={product.id}
                   layout
+                  role="button"
+                  tabIndex={0}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   whileHover={{ x: 5 }}
                   onClick={() => handleProductSelect(product)}
-                  className={`flex flex-col items-start p-6 text-left transition-all duration-300 border-l-4 relative overflow-hidden group ${
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleProductSelect(product);
+                    }
+                  }}
+                  className={`flex flex-col items-start p-6 text-left transition-all duration-300 border-l-4 relative overflow-hidden group cursor-pointer ${
                     selectedProduct.id === product.id 
                       ? "bg-surface-container border-primary" 
                       : "bg-surface hover:bg-surface-container-low border-transparent"
@@ -210,7 +222,45 @@ export function ProductCatalog() {
                   }`}>
                     {product.name}
                   </span>
-                </motion.button>
+
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="relative group/mini-share">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        className="p-2 hover:bg-primary/10 text-outline hover:text-primary transition-colors"
+                      >
+                        <Share2 size={12} />
+                      </button>
+                      <div className="absolute top-full right-0 mt-1 w-32 bg-white shadow-xl border border-outline-variant/10 opacity-0 invisible group-hover/mini-share:opacity-100 group-hover/mini-share:visible transition-all z-50">
+                        <div className="flex flex-col p-1">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const text = `Confira ${product.name} da INACOM: ${window.location.href}`;
+                              window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                            }}
+                            className="p-2 text-[8px] font-bold uppercase tracking-tighter text-outline hover:text-primary transition-colors text-left"
+                          >
+                            WhatsApp
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigator.clipboard.writeText(window.location.href);
+                              setCopiedId(product.id);
+                              setTimeout(() => setCopiedId(null), 2000);
+                            }}
+                            className="p-2 text-[8px] font-bold uppercase tracking-tighter text-outline hover:text-primary transition-colors text-left"
+                          >
+                            {copiedId === product.id ? "Copiado!" : "Copiar Link"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               ))}
             </div>
             
@@ -259,19 +309,61 @@ export function ProductCatalog() {
                     <p className="text-on-surface-variant font-light text-sm leading-relaxed mb-8">
                       {selectedProduct.description}
                     </p>
-                    <div className="flex flex-wrap gap-4">
-                      <a 
-                        href={selectedProduct.tdsLink} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="bg-primary text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center gap-2"
-                      >
-                        Ficha Técnica <FileText size={14} />
-                      </a>
-                      <button className="border border-outline-variant text-monolith px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
-                        Solicitar Amostra
-                      </button>
-                    </div>
+                      <div className="flex flex-wrap gap-4 relative">
+                        <a 
+                          href={selectedProduct.tdsLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="bg-primary text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-primary-container transition-colors flex items-center gap-2"
+                        >
+                          Ficha Técnica <FileText size={14} />
+                        </a>
+                        <button className="border border-outline-variant text-monolith px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">
+                          Solicitar Amostra
+                        </button>
+                        
+                        <div className="relative group/share">
+                          <button 
+                            className="border border-outline-variant text-monolith px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2"
+                          >
+                            Compartilhar <Share2 size={14} />
+                          </button>
+                          
+                          <div className="absolute bottom-full mb-2 left-0 w-48 bg-white shadow-2xl border border-outline-variant/20 opacity-0 invisible group-hover/share:opacity-100 group-hover/share:visible transition-all duration-200 z-50">
+                            <div className="p-2 flex flex-col">
+                              <button 
+                                onClick={() => {
+                                  const text = `Confira ${selectedProduct.name} da INACOM: ${window.location.href}`;
+                                  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                                }}
+                                className="flex items-center gap-3 p-3 text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary hover:bg-surface-container transition-colors text-left"
+                              >
+                                <MessageCircle size={14} /> WhatsApp
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  const subject = encodeURIComponent(`Produto INACOM: ${selectedProduct.name}`);
+                                  const body = encodeURIComponent(`Olá,\n\nConfira este produto da INACOM: ${selectedProduct.name}\n\nLink: ${window.location.href}`);
+                                  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+                                }}
+                                className="flex items-center gap-3 p-3 text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary hover:bg-surface-container transition-colors text-left"
+                              >
+                                <Mail size={14} /> Email
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  navigator.clipboard.writeText(window.location.href);
+                                  setCopiedId(selectedProduct.id);
+                                  setTimeout(() => setCopiedId(null), 2000);
+                                }}
+                                className="flex items-center gap-3 p-3 text-[10px] font-bold uppercase tracking-widest text-outline hover:text-primary hover:bg-surface-container transition-colors text-left"
+                              >
+                                <Copy size={14} /> {copiedId === selectedProduct.id ? "Copiado!" : "Copiar Link"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                   </div>
                 </div>
 
