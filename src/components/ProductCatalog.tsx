@@ -44,7 +44,7 @@ const products: Product[] = [
     category: "Abrasivos Convencionais",
     description: "Ideal para brunimento de acabamento em aços e ferros fundidos.",
     longDescription: "Nossas pedras vitrificadas são formuladas com ligas de alta performance que garantem uma remoção de material consistente e uma rugosidade controlada. O processo de sinterização a altas temperaturas cria uma estrutura porosa que facilita a refrigeração e evita o empastamento.",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1565439396343-a60cd4205436?fm=webp&q=80&w=800",
     specs: [
       { label: "Ligante", value: "Cerâmico Vitrificado" },
       { label: "Granulometria", value: "#60 - #1200" },
@@ -66,7 +66,7 @@ const products: Product[] = [
     category: "Superabrasivos",
     description: "Máxima durabilidade para brunimento de aços endurecidos.",
     longDescription: "O Nitreto de Boro Cúbico (CBN) é o segundo material mais duro conhecido. Nossas réguas de CBN oferecem uma vida útil até 100x superior aos abrasivos convencionais em aços tratados termicamente, reduzindo drasticamente o tempo de setup.",
-    image: "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1590422749458-1f4bf39eb4b1?fm=webp&q=80&w=800",
     specs: [
       { label: "Concentração", value: "C50 - C150" },
       { label: "Granulometria", value: "B46 - B252" },
@@ -88,7 +88,7 @@ const products: Product[] = [
     category: "Superabrasivos",
     description: "Excelente para brunimento de ferro fundido e materiais não-ferrosos.",
     longDescription: "Desenvolvidas para alta produtividade, as réguas de diamante INACOM garantem uma geometria perfeita e repetitividade mícron após mícron. Ideais para linhas de produção em massa onde a parada de máquina deve ser minimizada.",
-    image: "https://images.unsplash.com/photo-1504198453319-5ce911baf2ea?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356f87?fm=webp&q=80&w=800",
     specs: [
       { label: "Concentração", value: "C75 - C125" },
       { label: "Granulometria", value: "D46 - D181" },
@@ -110,7 +110,7 @@ const products: Product[] = [
     category: "Acessórios",
     description: "Ajuste fino manual ou semi-automático para pequenos reparos.",
     longDescription: "Bastões abrasivos portáteis para operações de ajuste fino que exigem sensibilidade e precisão. Disponíveis em diversos tamanhos e fixações para se adaptarem a qualquer necessidade de bancada.",
-    image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1611079830811-865bf4d28471?fm=webp&q=80&w=800",
     specs: [
       { label: "Formatos", value: "Retangulares / Quadrados / Cilíndricos" },
       { label: "Comprimento", value: "50mm - 200mm" },
@@ -310,6 +310,7 @@ export function ProductCatalog() {
                       alt={selectedProduct.name}
                       className="w-full h-full object-cover grayscale"
                       referrerPolicy="no-referrer"
+                      loading="lazy"
                     />
                   </div>
                   <div className="p-8 md:p-12 flex flex-col justify-center">

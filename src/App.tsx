@@ -99,7 +99,7 @@ export default function App() {
                 granulometria="#400 a #2500"
                 ra="0.02 - 0.20μm"
                 dureza="K a M"
-                image="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"
+                image="https://images.unsplash.com/photo-1565439396343-a60cd4205436?fm=webp&q=80&w=800"
               />} 
             />
             <Route 
@@ -112,7 +112,7 @@ export default function App() {
                 granulometria="#60 a #1200"
                 ra="0.10 - 0.60μm"
                 dureza="L a P"
-                image="https://images.unsplash.com/photo-1504917595217-d4dc5feeec52?auto=format&fit=crop&q=80&w=800"
+                image="https://images.unsplash.com/photo-1590422749458-1f4bf39eb4b1?fm=webp&q=80&w=800"
               />} 
             />
             <Route 
@@ -125,7 +125,7 @@ export default function App() {
                 granulometria="#80 a #800"
                 ra="0.15 - 0.40μm"
                 dureza="M a R"
-                image="https://images.unsplash.com/photo-1565158223933-2868ff1c944d?auto=format&fit=crop&q=80&w=800"
+                image="https://images.unsplash.com/photo-1504307651254-35680f356f87?fm=webp&q=80&w=800"
               />} 
             />
             <Route 
@@ -138,7 +138,7 @@ export default function App() {
                 granulometria="#36 a #400"
                 ra="0.40 - 1.20μm"
                 dureza="N a T"
-                image="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800"
+                image="https://images.unsplash.com/photo-1611079830811-865bf4d28471?fm=webp&q=80&w=800"
               />} 
             />
 

@@ -83,9 +83,10 @@ export function SectorPage({ title, sector, focus, h1, schemaProduct }: { title:
             </div>
             <div className="aspect-video bg-white ghost-border">
               <img 
-                src="https://images.unsplash.com/photo-1504917595217-d4dc5feeec52?auto=format&fit=crop&q=80&w=800" 
+                src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?fm=webp&q=80&w=800" 
                 alt={`Aplicação industrial no setor ${sector}`}
                 className="w-full h-full object-cover grayscale opacity-80"
+                loading="lazy"
               />
             </div>
           </div>

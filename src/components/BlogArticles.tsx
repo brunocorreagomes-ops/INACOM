@@ -27,7 +27,7 @@ const posts: BlogPost[] = [
     category: "Metrologia",
     date: "2026-04-12",
     dateDisplay: "12 Abr, 2026",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?fm=webp&q=80&w=800",
     excerpt: "A rugosidade aritmética (Ra) é o parâmetro mais crítico no brunimento. Aprenda como calcular, medir e interpretar os resultados para garantir a qualidade...",
     keywords: ["calcular Ra brunimento", "rugosidade superficial brunimento", "Ra honing"],
     schema: {
@@ -44,7 +44,7 @@ const posts: BlogPost[] = [
     category: "Gestão Industrial",
     date: "2026-04-08",
     dateDisplay: "08 Abr, 2026",
-    image: "https://images.unsplash.com/photo-1504917595217-d4dc5feeec52?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?fm=webp&q=80&w=800",
     excerpt: "Descubra como a escolha entre liga vitrificada e resinóide impacta diretamente a vida útil da pedra abrasiva e a economia na linha de produção...",
     keywords: ["custo por peça brunimento", "liga vitrificada abrasivo", "gestão industrial"],
     schema: {
@@ -61,7 +61,7 @@ const posts: BlogPost[] = [
     category: "Processos",
     date: "2026-03-24",
     dateDisplay: "24 Mar, 2026",
-    image: "https://images.unsplash.com/photo-1565158223933-2868ff1c944d?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?fm=webp&q=80&w=800",
     excerpt: "Entenda as diferenças técnicas, aplicações ideais e custos entre o brunimento (honing) e a retificação (grinding) para peças de alta precisão...",
     keywords: ["diferença brunimento retificação", "honing vs grinding", "brunimento industrial"],
     schema: {
