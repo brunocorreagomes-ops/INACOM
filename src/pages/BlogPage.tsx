@@ -1,8 +1,45 @@
+import { useParams, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { SeoHead } from "../components/SeoHead";
-import { ChevronRight, Calendar, User, Tag } from "lucide-react";
+import { ChevronRight, Calendar, Tag, ArrowLeft } from "lucide-react";
 
 export function BlogPage() {
+  const { slug } = useParams();
+
+  if (slug) {
+    return (
+      <div className="min-h-screen bg-white">
+        <SeoHead 
+          title="Artigo Técnico | INACOM"
+          description="Conteúdo técnico detalhado sobre processos de abrasivos e precisão industrial."
+        />
+        <article className="py-32 px-4 max-w-4xl mx-auto">
+          <Link to="/blog" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-primary mb-12 hover:gap-3 transition-all">
+            <ArrowLeft size={14} /> Voltar ao Blog
+          </Link>
+          <span className="text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Artigo Técnico</span>
+          <h1 className="text-4xl md:text-6xl font-black uppercase mb-12 leading-tight tracking-monolith">
+            Conhecimento em <br /> <span className="text-primary">Evolução.</span>
+          </h1>
+          <div className="prose prose-lg max-w-none font-light text-on-surface-variant space-y-8">
+            <p className="text-xl leading-relaxed border-l-4 border-primary pl-8 italic">
+              Este artigo está sendo atualizado por nossa equipe de engenharia para refletir as últimas normas ISO de rugosidade e metrologia industrial.
+            </p>
+            <p>
+              O processo de brunimento é fundamental para a vida útil de componentes mecânicos. A correta especificação de abrasivos garante o desempenho e a segurança em aplicações críticas.
+            </p>
+          </div>
+          
+          <div className="mt-20 pt-12 border-t border-outline-variant/20">
+            <Link to="/#pedido-orcamento" className="bg-primary text-white px-10 py-5 font-black uppercase tracking-widest hover:bg-primary-container transition-all inline-block">
+              Consultar Especialista
+            </Link>
+          </div>
+        </article>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <SeoHead 
@@ -25,7 +62,6 @@ export function BlogPage() {
 
       <section className="py-24 px-4 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {/* We would map the blog posts here, reuse BlogArticles component logic but with more detail */}
           <article className="group cursor-pointer">
              <div className="aspect-[16/9] bg-surface mb-8 ghost-border"></div>
              <div className="flex items-center gap-6 mb-4 text-[10px] font-bold uppercase tracking-widest text-outline">
@@ -36,9 +72,9 @@ export function BlogPage() {
              <p className="text-on-surface-variant font-light text-sm line-clamp-3 mb-8">
                A rugosidade aritmética (Ra) é o parâmetro mais crítico no brunimento industrial. Este guia ensina como realizar o cálculo matemático...
              </p>
-             <button className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2 border-b-2 border-primary pb-2">
+             <Link to="/blog/como-calcular-ra-brunimento" className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2 border-b-2 border-primary pb-2">
                Ler Artigo Completo <ChevronRight size={14} />
-             </button>
+             </Link>
           </article>
         </div>
       </section>

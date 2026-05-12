@@ -283,7 +283,7 @@ export function ProductCatalog() {
                 Acesse o catálogo completo da INACOM com especificações técnicas de toda a nossa linha de abrasivos e superabrasivos.
               </p>
               <a 
-                href="/catalogo-inacom.pdf" 
+                href="./catalogo-inacom.pdf" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 bg-primary text-white px-6 py-4 text-[10px] font-bold uppercase tracking-widest hover:bg-primary-container transition-all w-full justify-center"
