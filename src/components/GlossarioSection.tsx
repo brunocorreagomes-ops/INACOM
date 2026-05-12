@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const termos = [
   {
     id: "brunimento",
@@ -101,13 +103,13 @@ export function GlossarioSection() {
               {item.relacionados.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {item.relacionados.map((rel) => (
-                    <a 
+                    <Link 
                       key={rel}
-                      href={`/#${rel.toLowerCase().replace(/\s/g, '-')}`}
+                      to={`/#${rel.toLowerCase().replace(/\s/g, '-')}`}
                       className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 bg-surface-container text-outline hover:bg-primary hover:text-white transition-colors"
                     >
                       {rel}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}
