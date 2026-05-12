@@ -78,6 +78,10 @@
     outline: 1px solid rgba(198, 198, 198, 0.15);
   }
 
+  .font-outline {
+    -webkit-text-stroke: 1px currentColor;
+  }
+
   /* Force hard edges everywhere as per design system */
   * {
     border-radius: 0 !important;

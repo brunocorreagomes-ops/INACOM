@@ -51,12 +51,12 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="max-w-[1440px] mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="max-w-[1440px] mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col items-center gap-4 text-center">
         <p className="text-[10px] font-bold uppercase tracking-widest text-white/20">
           © 2026 INACOM INDÚSTRIA DE ABRASIVOS. TODOS OS DIREITOS RESERVADOS.
         </p>
         <p className="text-[10px] font-bold uppercase tracking-widest text-white/20">
-          Desenvolvido por <a href="https://orvalia.com" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-primary transition-colors">ORVALIA.</a>
+          Desenvolvido por <a href="https://www.orvalia.com.br" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-primary transition-colors">ORVALIA.</a>
         </p>
       </div>
 

@@ -44,7 +44,7 @@ const products: Product[] = [
     category: "Abrasivos Convencionais",
     description: "Ideal para brunimento de acabamento em aços e ferros fundidos.",
     longDescription: "Nossas pedras vitrificadas são formuladas com ligas de alta performance que garantem uma remoção de material consistente e uma rugosidade controlada. O processo de sinterização a altas temperaturas cria uma estrutura porosa que facilita a refrigeração e evita o empastamento.",
-    image: "https://images.unsplash.com/photo-1565439396343-a60cd4205436?fm=webp&q=80&w=800",
+    image: "https://i.ibb.co/Tn4dhf2/Inacom-Abrasivo-leke-1.webp",
     specs: [
       { label: "Ligante", value: "Cerâmico Vitrificado" },
       { label: "Granulometria", value: "#60 - #1200" },

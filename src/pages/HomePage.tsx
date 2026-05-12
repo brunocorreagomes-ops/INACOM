@@ -203,7 +203,7 @@ export function HomePage() {
               <h1 className="text-white text-3xl sm:text-5xl md:text-7xl font-black leading-[1] md:leading-[0.9] tracking-monolith mb-6 md:mb-8 uppercase" itemProp="name">
                 Domínio Absoluto em Brunimento Industrial
               </h1>
-              <p className="text-on-primary text-sm sm:text-base md:text-xl font-light mb-8 md:mb-12 max-w-xl border-l-2 border-primary pl-10 leading-relaxed" itemProp="description">
+              <p className="text-white text-sm sm:text-base md:text-xl font-light mb-8 md:mb-12 max-w-xl border-l-2 border-white pl-10 leading-relaxed" itemProp="description">
                 Abrasivos de alta precisão para estabilidade de processo, alcance exato de rugosidade e redução de custo por peça.
               </p>
               <Link to="/#pedido-orcamento" className="btn-machined text-white px-10 py-6 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] inline-flex items-center gap-4 group">

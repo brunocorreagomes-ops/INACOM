@@ -14,6 +14,20 @@ export function AboutUs() {
       </div>
 
       <div className="max-w-[1440px] mx-auto relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="mb-16 md:mb-24 rounded-sm overflow-hidden ghost-border"
+        >
+          <img 
+            src="https://i.ibb.co/PH9n07H/fachada-2-inacom.webp" 
+            alt="Fachada INACOM - Unidade Industrial Indaiatuba" 
+            className="w-full h-[300px] md:h-[500px] lg:h-[600px] object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+            loading="lazy"
+          />
+        </motion.div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -21,12 +35,12 @@ export function AboutUs() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-primary text-[10px] font-bold uppercase tracking-[0.3em] block mb-6">Tradição & Excelência</span>
+            <span className="text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] block mb-6">Tradição & Excelência</span>
             <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-monolith leading-tight mb-8">
               A Força da <br />
-              <span className="text-primary font-outline text-transparent">Precisão</span> Industrial.
+              <span className="text-white font-outline text-transparent">Precisão</span> Industrial.
             </h2>
-            <div className="space-y-6 text-white/70 font-light text-lg leading-relaxed">
+            <div className="space-y-6 text-white/90 font-light text-lg leading-relaxed">
               <p>
                 Fundada com a visão de revolucionar o mercado de brunimento no Brasil, a <span className="text-white font-bold">INACOM</span> consolidou-se como referência em tecnologia de abrasivos e superabrasivos.
               </p>
@@ -39,13 +53,13 @@ export function AboutUs() {
             </div>
 
             <div className="grid grid-cols-2 gap-8 mt-12">
-              <div className="border-l-2 border-primary pl-6">
+              <div className="border-l-2 border-white/30 pl-6">
                 <span className="block text-3xl font-black text-white mb-2">25+</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Anos de Mercado</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Anos de Mercado</span>
               </div>
-              <div className="border-l-2 border-primary pl-6">
+              <div className="border-l-2 border-white/30 pl-6">
                 <span className="block text-3xl font-black text-white mb-2">100%</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Engenharia Nacional</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Engenharia Nacional</span>
               </div>
             </div>
           </motion.div>
@@ -53,22 +67,22 @@ export function AboutUs() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
               {
-                icon: <Award className="text-primary" size={32} />,
+                icon: <Award className="text-white" size={32} />,
                 title: "Qualidade Premium",
                 desc: "Abrasivos produzidos com as melhores matérias-primas mundiais."
               },
               {
-                icon: <ShieldCheck className="text-primary" size={32} />,
+                icon: <ShieldCheck className="text-white" size={32} />,
                 title: "Confiabilidade",
                 desc: "Processos certificados que garantem repetibilidade em larga escala."
               },
               {
-                icon: <History className="text-primary" size={32} />,
+                icon: <History className="text-white" size={32} />,
                 title: "Tradição",
                 desc: "Décadas de know-how acumulado no desenvolvimento de ligas."
               },
               {
-                icon: <Target className="text-primary" size={32} />,
+                icon: <Target className="text-white" size={32} />,
                 title: "Alta Precisão",
                 desc: "Foco total no acabamento superficial e geometria perfeita."
               }
@@ -83,7 +97,7 @@ export function AboutUs() {
               >
                 <div className="mb-6 group-hover:scale-110 transition-transform origin-left">{item.icon}</div>
                 <h3 className="text-white font-black uppercase text-sm mb-3 tracking-widest">{item.title}</h3>
-                <p className="text-white/50 text-xs leading-relaxed font-light">{item.desc}</p>
+                <p className="text-white/70 text-xs leading-relaxed font-light">{item.desc}</p>
               </motion.div>
             ))}
           </div>
